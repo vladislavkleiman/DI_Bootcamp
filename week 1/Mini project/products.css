@@ -1,0 +1,146 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans';
+}
+
+
+.emblem {
+    float: left;
+    margin-left: 40px;
+}
+
+
+.row_1, .row_2, .row_3 {
+    text-align: center;
+    margin-top: 35px;
+}
+
+.card1, .card2, .card3, .card4 {
+    max-width: 200px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+    display: inline-block;
+    margin-left: 40px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.card1, .card2, .card3, .card4 {
+    transition: 1s;
+}
+
+.card1:hover, .card2:hover, .card3:hover, .card4:hover {
+    transform: scale(1.1);
+}
+
+
+.name_card {
+    margin-top: 10px;
+}
+
+.price {
+    margin-top: 5px;
+}
+
+.price_new {
+    color: rgb(13, 167, 82);
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 7px;
+}
+
+.price_old {
+    color: rgb(147, 151, 149);
+    font-size: 15px;
+    margin-top: 7px;
+    text-decoration: line-through;
+}
+
+.discount {
+    color: #fff;
+    line-height: 30px;
+    text-align: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #f00a0a;
+    font-size: small;
+    font-weight: bold;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.new {
+    color: #fff;
+    line-height: 30px;
+    text-align: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #24be06;
+    font-size: small;
+    font-weight: bold;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+div button {
+    padding: 8px;
+    color: rgba(49, 48, 48, 0.596);
+    background-color: #ffffff;
+    text-align: center;
+    cursor: pointer;
+    width: 130px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 7px;
+    margin-top: 7px;
+    border-color: rgba(49, 48, 48, 0.596);
+    border: 1px solid rgba(49, 48, 48, 0.596);
+}
+
+.footer {
+    background-color: rgb(0, 0, 0);
+    width: 100%;
+    height: 60px;
+    bottom: 0;
+    overflow: auto;
+}
+
+.footer_header {
+    text-align: center;
+    margin-top: 15px;
+    color: white;
+}
+
+
+.menu {
+    width: 100%;
+    height: 60px;
+    background-color: rgb(0, 0, 0);
+    text-align: right;
+    color: white;
+}
+
+.menu ul a {
+    margin: 70px;
+    display: inline;
+    padding: 0 10px 20px 300px;
+    text-decoration: none;
+}
+
+
+.menu ul{
+    margin-top: 20px;
+    position: absolute;
+}
+
+.emblem {
+    float: left;
+    margin-left: 40px;
+    margin-top: 20px;
+}

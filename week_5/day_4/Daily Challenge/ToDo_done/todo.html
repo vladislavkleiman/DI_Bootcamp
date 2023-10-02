@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="todo.css">
+        <title>Document</title>
+        <script src="https://kit.fontawesome.com/ff9e72d054.js" crossorigin="anonymous"></script>
+    </head>
+<body>
+    <div class="main_container">
+        <div class="header_todo">TO-DO LIST</div>
+        <form class="task_form">
+            <input type="text" name="new_task" id="new_task_input" placeholder="New task">
+            <input type="submit" id="submit_input" onclick="addTask(event)" value="ADD">
+        </form>
+        <div class="tasks_container">
+            <div class="listTasks">
+
+            </div>
+        </div>
+        <div class="clear" >
+            <button class="clear_btn" onclick="clearAllTasks()">Clear</button>
+        </div>
+    </div>
+    <script src="todo.js"></script>
+</body>
+</html>

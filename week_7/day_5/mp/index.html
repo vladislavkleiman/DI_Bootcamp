@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Random Quote</title>
+</head>
+<body>
+
+    <div class="main_box">
+        <div class="box">
+            <div class="button_generate_quote">
+                <button class="button_GQ" onclick=generateQuote()>Generate Quote</button>
+            </div>
+            <div class="quote"></div>
+            <div class="author"></div>
+            <div class="amountCharsWithSpace">amountCharsWithSpace
+                <div class="amountCh"></div>
+            </div>
+            <div class="amountCharsWithoutSpace"> amountCharsWithoutSpace
+                <div class="amountChWS"></div>
+            </div>
+            <div class="amountWords"> amountWords
+                <div class="amWrds"></div>
+            </div>
+            <div class="amountLike"></div>
+            <div class="Like">Like
+                <button class="btn_like" onclick="like()">Like</button>
+                <div class="countLike"></div>
+            </div>
+            <div class="displayAllQuotesOneAuthor"> displayAllQuotesOneAuthor
+                <button class="QuotesOneAuthor" onclick="quotesOneAuthor()">displayAllQuotesOneAuthor</button>
+            </div>
+            <div class="previous">
+                <button class="previousQuote" onclick="previousQuote()">Previous Quote</button>
+            </div>
+            <div class="next">
+                <button class="next" onclick="nextQuote()">Next Quote</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

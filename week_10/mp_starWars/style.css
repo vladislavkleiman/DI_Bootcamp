@@ -1,0 +1,72 @@
+body{
+    background-image: url(matt-gross.png);
+}
+
+*{
+    color: white;
+}
+
+#info{
+    width: 500px;
+    height: 300px;
+    border: 2px solid yellow;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;   
+    justify-content: center;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#findSomeone {
+    margin-top: 20px;
+    font-weight: bolder;
+    border: 1px solid yellow;
+    border-radius: 8px;
+    width: 150px;
+    height: 40px;
+    color: black;
+}
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner i {
+    animation: spin 1s linear infinite;
+    font-size: 100px;
+}
+
+.spinner > *{
+    padding: 40px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.spinner {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+    justify-content: center; 
+    height: 100%;          
+}
+
+#info > p:first-child {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.imgStarWars{
+    width: 400px;
+    margin-bottom: 30px;
+}
+

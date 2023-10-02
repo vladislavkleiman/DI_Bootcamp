@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Anton', sans-serif;
+    font-family: 'Roboto', sans-serif;
+}
+
+
+.page{
+    height: 90vh;
+    background-image: url(168069577-2f570d08-61d3-49d8-b7dd-c4b9192aaf68.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    background-position: left;
+}
+
+.logo{
+    position: relative;
+    top: -160px;
+    left: 40px;
+    width: 300px;
+}
+
+.list {
+    width: 100%;
+    height: 120px;
+    background-color: black;
+    color: white;
+}
+
+ul {
+    list-style-type: none;
+    font-weight: bold;
+    margin-right: 70px;
+}
+li {
+    display: inline;
+    float: right;
+    padding: 20px;
+}
+
+.list ul li a{
+    display: block;
+    font-weight: 1000;
+    font-size: 40px;
+    margin-top: 25px;
+}
+
+
+.content {
+    width: 1000px;
+    height: 420px;
+    position: absolute;
+    top: 450px;
+    left: 70px;
+
+}
+
+.name_hero{
+    width: 100%;
+    font-size: 60px;
+
+}
+
+.text_info {
+    width: 700px;
+    margin-top: 50px;
+    font-weight: bold;
+
+}
+
+
+.footer {
+    width: 100%;
+    height: 100px;
+    background-color: black;
+    color: white;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    text-align: center;
+
+}
+
+.link_to_site{
+    margin-top: 20px;
+}
+
+.year{
+    padding-top: 20px;
+}

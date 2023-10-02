@@ -1,0 +1,165 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Anton', sans-serif;
+    font-family: 'Roboto', sans-serif;
+}
+
+.header{
+    font-size: 30px;
+    font-weight: bolder;
+    margin-bottom: 10px;
+}
+
+.page{
+    margin: 0 auto;
+}
+
+.side{
+    width: 300px;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    text-align: center;
+    padding: 0px 10px;
+    padding-top: 20px;
+    background-color: rgba(18, 19, 19, 0.315);
+}
+
+
+.info{
+    position: relative;
+    top: 4vh;
+
+}
+
+.full_name{
+    font-size: 40px;
+    font-weight: bolder;
+}
+
+.job_profession{
+    margin-top: 20px;
+    margin-bottom: 40px;
+    font-size: 20px;
+}
+
+.contacts{
+    margin-bottom: 10px;
+}
+
+.phone, .mail, .adress{
+    margin-top: 10px;
+}
+
+.adress{
+    margin-bottom: 10px;
+}
+
+
+.logo{
+    margin-top: 20px;
+}
+
+.twitter, .fb {
+    margin-top: 15px;
+}
+
+.content{
+    width: 600px;
+    height: 100vh;
+    position: relative;
+    top: 0;
+    left: 320px;
+    padding: 0px 10px;
+    background-color: rgba(59, 59, 59, 0.089);
+}
+
+.about{
+    padding: 20px;
+    padding-top: 40px;
+    width: 500px;
+    height: 90vh;
+    margin: 0 auto;
+}
+
+.profile{
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+
+.text{
+    margin-top: 10px;
+    text-align: justify;
+}
+
+.education{
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+
+.degree{
+    margin-top: 10px;
+}
+
+.master .un{
+    margin-top: 5px;
+}
+
+.un_spec{
+    font-weight: bold;
+}
+
+.bac .un{
+    margin-top: 5px;
+}
+
+.bac{
+    margin-top: 8px;
+}
+
+.skills{
+    margin-bottom: 20px;
+}
+
+
+
+.list1, .list2{
+    display: inline-block;
+    padding: 10px;
+}
+
+.list1{
+    position: relative;
+    left: 40px;
+}
+
+.list2{
+    position: relative;
+    float: right;
+    right: 40px;
+}
+
+
+.job{
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.job_title{
+    font-weight: bold;
+}
+
+.year_job{
+    margin-top: 5px;
+}
+
+.responsibilities_info{
+    margin-top: 10px;
+}
+

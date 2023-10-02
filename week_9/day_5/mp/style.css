@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: rgb(85, 30, 237);
+}
+
+#weatherList {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 60px;
+}
+
+nav {
+    text-align: center;
+    background-color: blueviolet;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nameWeatherList{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(10, 207, 141);
+    font-size: 40px;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.cardOfCity{
+    background-color: rgb(190, 195, 190);
+    width: 250px;
+    height: 450px;
+    text-align: center;
+    border-radius: 10px;
+    position: relative;
+    margin-top: 70px;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.nameCityCountry{
+    color: rgb(13, 155, 155);
+    margin-top: 40px;
+    font-size: xx-large;
+    position: relative;
+    z-index: 100;
+}
+
+.temperature{
+    font-size: 50px;
+    font-weight: bolder;
+}
+
+.descriptionWeather{
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+.circleBig{
+    background-color: rgba(0, 255, 183, 0.625);
+    width: 90px;
+    height: 90px;
+    position: relative;
+    bottom: 350px;
+    left: 10px;
+    border-radius: 50%;
+}
+
+.circleSmall{
+    background-color: rgba(255, 0, 217, 0.312);
+    width: 70px;
+    height: 70px;
+    position: relative;
+    left: 180px;
+    bottom: 120px;
+    border-radius: 50%;
+}
+
+.deleteButton{
+    width: 50px;
+    position: relative;
+    bottom: 520px;
+    left: 100px;
+}

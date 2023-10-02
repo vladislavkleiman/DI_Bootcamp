@@ -1,0 +1,8 @@
+#target.is-hovered {
+    border: 2px solid purple;
+}
+
+#target.is-center {
+    display: grid;
+    place-items: center;
+}
