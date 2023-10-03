@@ -34,7 +34,7 @@ router.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   fs.readFile(dataOfUsers, "utf-8", (err, data) => {
-    if (err) return res.status(500).json({ error: "Internal Server Error" });
+    if (err) return res.status(404).json({ error: "Something go wrong" });
 
     const users = JSON.parse(data);
     const existUser = users.find((user) => user.username === username);
@@ -42,12 +42,15 @@ router.post("/login", (req, res) => {
     if (!existUser)
       return res.status(404).json({ message: "Username is not registered!" });
 
-    const rightPassword = bcrypt.compare(password, existUser.password);
-    if (rightPassword) {
-      res.send({ message: `Hi ${username}, welcome back again!` });
-    } else {
-      res.status(401).send({ message: "Invalid password" });
-    }
+    bcrypt.compare(password, existUser.password, (err, result) => {
+      if (err) return res.status(404).json({ error: "Something go wrong" });
+
+      if (result) {
+        res.send({ message: `Hi ${username}, welcome back again!` });
+      } else {
+        res.status(404).send({ message: "Invalid password" });
+      }
+    });
   });
 });
 
