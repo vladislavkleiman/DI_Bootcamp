@@ -1,10 +1,42 @@
+const username = document.getElementById("username");
+const password = document.getElementById("password");
+const usernameLogin = document.getElementById("usernameLogin");
+const passwordLogin = document.getElementById("passwordLogin");
+
 document
-  .getElementById("btnRegister")
-  .addEventListener("click", async (event) => {
+  .getElementById("formInfo")
+  .addEventListener("submit", async (event) => {
     event.preventDefault();
-    const form = document.forms["register"];
-    const formData = new FormData(form);
-    const response = await fetch("/users/register");
+    const myData = {
+      username: username.value,
+      password: password.value,
+    };
+    const response = await fetch("/users/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(myData),
+    });
     const data = await response.json();
     document.getElementById("textMessage").value = data.message;
+  });
+
+document
+  .getElementById("formLogin")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const myData = {
+      username: usernameLogin.value,
+      password: passwordLogin.value,
+    };
+    const response = await fetch("/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(myData),
+    });
+    const data = await response.json();
+    document.getElementById("textMessage1").value = data.message;
   });

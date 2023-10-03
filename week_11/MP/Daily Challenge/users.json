@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": 1,
+    "username": "swedgh",
+    "password": "$2b$05$sHQmxS6Ipmk/FtlWgqo/GOfqOjseTjAxgHG7do/iUcSl82tIBD3mm"
+  },
+  {
+    "id": 2,
+    "username": "asf",
+    "password": "$2b$05$CvPAH.sdtn/7pdlUG7t/9u.JU.7LDXTp4P8yF/6FNBYvws21.gImW"
+  },
+  {
+    "id": 3,
+    "username": "фыа",
+    "password": "$2b$05$fWxEqU/GF7y8xXPQiWZ12e7X.lXeWnIwSLd1zM3NXJ6TXD.x5io7K"
+  },
+  {
+    "id": 4,
+    "username": "adfb",
+    "password": "$2b$05$J.xjR49UujDsSsefh0eVP.1euqrc0Z01AX9zU2utSQl3HRN5SNGgu"
+  },
+  {
+    "id": 5,
+    "username": "dfdd",
+    "password": "$2b$05$JGKr0eMCjFi1FoskvoZl6..SimSonKy2oB0pXzG2/PisHncxm7YGm"
+  },
+  {
+    "id": 6,
+    "username": "dfn",
+    "password": "$2b$05$nvdB2mxi6prnsyhxwExYqeRjPQho.wywBzGgMtQKD4YynU3qALfxy"
+  }
+]
