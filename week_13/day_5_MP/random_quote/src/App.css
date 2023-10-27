@@ -1,0 +1,53 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.main {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quoteMain {
+  background-color: white;
+  width: 800px;
+  height: 200px;
+  border: 1px solid white;
+  border-radius: 15px;
+}
+
+.author,
+.btnSwapQuote {
+  margin-left: 70%;
+  margin-top: 15px;
+}
+
+.author {
+  font-size: 25px;
+  opacity: 1;
+}
+
+.btnSwapQuote {
+  width: 100px;
+  height: 50px;
+  border-radius: 10px;
+}
+
+.quoteHeader,
+.author {
+  -webkit-text-stroke: 1px #000000;
+  -webkit-text-stroke-color: #000000;
+}
+
+.quoteHeader {
+  margin-top: 12px;
+  margin-left: 10px;
+  opacity: 1;
+}
+
+.quote {
+  transition: opacity 1000s;
+}
