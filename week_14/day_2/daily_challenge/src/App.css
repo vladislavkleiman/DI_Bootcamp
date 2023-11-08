@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#header {
+  color: white;
+  background-color: rgb(27, 20, 20);
+  height: 5vh;
+}
+
+#formUser {
+  width: 98.9vw;
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  background-color: burlywood;
+  padding-left: 20px;
+  justify-content: space-around;
+}
+
+#firstName,
+#lastName,
+#age,
+#destination,
+#btnSubmit {
+  width: 300px;
+  height: 30px;
+}
+
+#summary {
+  color: white;
+  background-color: rgb(10, 112, 97);
+  height: 55vh;
+  width: 98.9vw;
+  display: flex;
+  padding-left: 20px;
+  flex-direction: column;
+  justify-content: space-around;
+}

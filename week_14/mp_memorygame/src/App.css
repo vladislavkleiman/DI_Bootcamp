@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+}
+
+.header1 {
+  width: 100vw;
+  height: 70px;
+  background-color: red;
+  color: white;
+}
+
+.header2 {
+  width: 100vw;
+  height: 35px;
+  background-color: red;
+  color: white;
+  margin-top: 10px;
+}
+
+.heroContainer {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 30px;
+}
+
+.hero {
+  display: flex;
+  justify-content: center;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  height: 400px;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 2px 2px;
+}
+
+.hero > img {
+  width: 200px;
+}
