@@ -1,0 +1,105 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  width: 100vw;
+  height: 7vh;
+  border: solid 1px black;
+  text-align: justify;
+  background-color: aquamarine;
+}
+
+.head,
+.home,
+.favorites {
+  display: inline-block;
+}
+
+.head {
+  float: left;
+  margin-left: 40px;
+  margin-top: 16px;
+}
+
+.buttons {
+  margin-right: 40px;
+  margin-top: 16px;
+}
+
+.home,
+.favorites {
+  float: right;
+  width: 100px;
+  height: 40px;
+}
+
+.mainContainer {
+  height: 93vh;
+  width: 100vw;
+  background-color: bisque;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.weatherContainer {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 120px;
+}
+
+.stateOfWeather {
+  text-align: center;
+  margin: 350px;
+  font-size: 50px;
+}
+
+.searchCity {
+  width: 400px;
+  height: 30px;
+}
+
+.top {
+  text-align: justify;
+}
+
+.cityWeather,
+.pictureOfWeather,
+.nameOfCity,
+.addToFavorites {
+  display: inline-block;
+}
+
+.cityWeather,
+.pictureOfWeather,
+.nameOfCity {
+  float: left;
+}
+
+.addToFavorites {
+  float: right;
+}
+
+.weatherForDays {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  position: absolute;
+  bottom: 10%;
+  left: 0;
+  right: 0;
+  padding: 20px;
+}
+
+.dayWeather {
+  border: 1px solid black;
+  width: 150px;
+  height: 140px;
+  text-align: center;
+}
