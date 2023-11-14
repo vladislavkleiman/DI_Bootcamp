@@ -1,4 +1,4 @@
-const { db } = require("../../config/db.js");
+const { db } = require("../config/db.js");
 
 const getUser = (username) => {
   return db("users").select("id", "username", "password").where({ username });
