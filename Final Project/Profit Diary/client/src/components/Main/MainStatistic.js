@@ -1,17 +1,56 @@
 import React from "react";
-import "../../styles/MainStatictic.css";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 const MainStatictic = () => {
   return (
-    <div className="containerMainStatistic">
-      <div className="statistic">Gross Profit</div>
-      <div className="statistic">% to capital</div>
-      <div className="statistic">Avg profit</div>
-      <div className="statistic">Profit factor</div>
-      <div className="statistic">Winrate</div>
-      <div className="statistic">Gain to pain ratio</div>
-      <div className="trades">All trades</div>
-    </div>
+    <TableContainer
+      component={Paper}
+      sx={{ maxWidth: 1600, float: "right", marginRight: 5, marginTop: 3 }}
+    >
+      <Table aria-label="customized table">
+        <TableBody>
+          <TableRow>
+            <TableCell sx={{ width: "500px", border: "1px solid black" }}>
+              Gross Profit
+            </TableCell>
+            <TableCell sx={{ width: "500px", border: "1px solid black" }}>
+              % to capital
+            </TableCell>
+            <TableCell sx={{ width: "500px", border: "1px solid black" }}>
+              Avg profit
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell sx={{ width: "500px", border: "1px solid black" }}>
+              Profit factor
+            </TableCell>
+            <TableCell sx={{ width: "500px", border: "1px solid black" }}>
+              Winrate
+            </TableCell>
+            <TableCell sx={{ width: "500px", border: "1px solid black" }}>
+              Gain to pain ratio
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell
+              colSpan={3}
+              sx={{ height: "85vh", border: "1px solid black" }}
+            >
+              All trades
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
