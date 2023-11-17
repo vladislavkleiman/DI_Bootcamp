@@ -13,13 +13,11 @@ import HomeIcon from "@mui/icons-material/Home";
 import NoteIcon from "@mui/icons-material/Note";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
-import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import NotesIcon from "@mui/icons-material/Notes";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
-
+import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 
@@ -29,6 +27,8 @@ function SideBar(props) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [openTradeStats, setOpenTradeStats] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -42,29 +42,44 @@ function SideBar(props) {
     setOpenTradeStats(!openTradeStats);
   };
 
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
   const drawer = (
     <div>
       <List>
-        {["Home", "Diary", "Work Space", "Info about Stocks"].map(
-          (text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon style={{ color: "black" }}>
-                  {text === "Home" ? (
-                    <HomeIcon />
-                  ) : text === "Diary" ? (
-                    <NoteIcon />
-                  ) : text === "Work Space" ? (
-                    <ViewModuleIcon />
-                  ) : text === "Info about Stocks" ? (
-                    <NewspaperIcon />
-                  ) : null}
-                </ListItemIcon>
-                <ListItemText primary={text} style={{ color: "black" }} />
-              </ListItemButton>
-            </ListItem>
-          )
-        )}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => handleNavigation("/")}>
+            <ListItemIcon style={{ color: "black" }}>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Home" style={{ color: "black" }} />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => handleNavigation("/diary")}>
+            <ListItemIcon style={{ color: "black" }}>
+              <NoteIcon />
+            </ListItemIcon>
+            <ListItemText primary="Diary" style={{ color: "black" }} />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => handleNavigation("/info-about-stocks")}
+          >
+            <ListItemIcon style={{ color: "black" }}>
+              <NewspaperIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Info about Stocks"
+              style={{ color: "black" }}
+            />
+          </ListItemButton>
+        </ListItem>
 
         {/* Trade Statistics Menu Item */}
         <ListItem disablePadding>
@@ -83,13 +98,19 @@ function SideBar(props) {
         {/* Submenu for Trade Statistics */}
         <Collapse in={openTradeStats} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }}>
+            <ListItemButton
+              onClick={() => handleNavigation("/calendar")}
+              sx={{ pl: 4 }}
+            >
               <ListItemIcon>
                 <EventNoteIcon />
               </ListItemIcon>
               <ListItemText primary="Calendar" />
             </ListItemButton>
-            <ListItemButton sx={{ pl: 4 }}>
+            <ListItemButton
+              onClick={() => handleNavigation("/general-statistic")}
+              sx={{ pl: 4 }}
+            >
               <ListItemIcon>
                 <QueryStatsIcon />
               </ListItemIcon>

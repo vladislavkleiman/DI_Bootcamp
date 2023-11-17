@@ -2,13 +2,13 @@ import React from "react";
 import SideBar from "./SideBar.js";
 import MainStatistic from "./MainStatistic.js";
 
-const MainComponent = () => {
+const HomeComponent = () => {
   return (
-    <div className="mainComponent">
+    <div className="homeComponent">
       <MainStatistic />
       <SideBar />
     </div>
   );
 };
 
-export default MainComponent;
+export default HomeComponent;
