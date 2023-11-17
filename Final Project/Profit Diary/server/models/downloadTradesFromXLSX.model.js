@@ -45,7 +45,7 @@ const insertDataFromExcel = async (filePath) => {
   }));
 
   try {
-    const insertedRows = await db("trades")
+    const insertedRows = await db("tradestransaction")
       .insert(formattedData)
       .returning("*");
     return insertedRows;
@@ -62,7 +62,7 @@ const insertDataFromExcel = async (filePath) => {
 };
 
 const getTradesData = () => {
-  return db("trades").select("*");
+  return db("tradestransaction").select("*");
 };
 
 module.exports = {

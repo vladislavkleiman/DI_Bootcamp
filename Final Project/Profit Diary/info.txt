@@ -10,7 +10,7 @@ CREATE TABLE users (
 create table trades:
 
 
-CREATE TABLE trades (
+CREATE TABLE tradestransaction (
     id_trades SERIAL PRIMARY KEY,
     DateTrades DATE,
     Currency TEXT,

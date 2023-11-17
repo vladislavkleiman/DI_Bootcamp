@@ -4,7 +4,7 @@ async function calculateProfit() {
   // Fetch all trades from the database, sorted by symbol and DateTrades
   const trades = await db
     .select("*")
-    .from("trades")
+    .from("tradestransaction")
     .orderBy(["symbol", "datetrades"]);
 
   let results = {};
