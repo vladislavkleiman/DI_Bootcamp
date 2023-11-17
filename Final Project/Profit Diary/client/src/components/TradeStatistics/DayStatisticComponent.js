@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import TradeTable from "./TradesTableComponent";
 
 const DayStatisticComponent = () => {
   const [dataTrades, setDataTrades] = useState({});
@@ -15,7 +16,6 @@ const DayStatisticComponent = () => {
         }
         const data = await response.json();
         setDataTrades(data);
-        console.log(data); // Correct place to log the fetched data
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(error.message);
@@ -24,6 +24,21 @@ const DayStatisticComponent = () => {
 
     fetchData();
   }, []);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
+
+  const flattenedTrades = Object.entries(dataTrades).flatMap(
+    ([symbol, trades]) =>
+      trades.map((trade) => ({
+        date: formatDate(trade.tradeDate), // Format the date
+        symbol: symbol,
+        tradeType: trade.tradeType,
+        profit: trade.profit,
+      }))
+  );
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -38,17 +53,7 @@ const DayStatisticComponent = () => {
         alignItems: "center",
       }}
     >
-      {Object.entries(dataTrades).map(([symbol, trades], index) => (
-        <div key={index}>
-          <h3>{symbol}</h3>
-          {Array.isArray(trades) &&
-            trades.map((trade, idx) => (
-              <div key={idx}>
-                <p>Profit/Loss: {trade.profit ? `$${trade.profit}` : "N/A"}</p>
-              </div>
-            ))}
-        </div>
-      ))}
+      <TradeTable trades={flattenedTrades} />
     </div>
   );
 };
