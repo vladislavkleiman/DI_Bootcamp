@@ -10,7 +10,6 @@ CREATE TABLE users (
 create table trades:
 
 CREATE TABLE trades (
-    id_trades SERIAL PRIMARY KEY,
     DateTrades DATE,
     Currency TEXT,
     Type INTEGER,
@@ -24,3 +23,32 @@ CREATE TABLE trades (
     NetProceeds NUMERIC
 );
 
+
+
+CREATE TABLE trades (
+    DateTrades varchar,
+    Currency varchar,
+    Type varchar,
+    Side varchar,
+    Symbol varchar,
+    Qty varchar,
+    Price varchar,
+    ExecTime varchar,
+    Comm varchar,
+    GrossProceeds varchar,
+    NetProceeds varchar
+); 
+
+CREATE TABLE trades (
+    id_trades SERIAL PRIMARY KEY,
+    DateTrades DATE,
+    Currency TEXT,
+    Type INTEGER,
+    Side TEXT,
+    Symbol TEXT,
+    Qty INTEGER,
+    Price NUMERIC,
+    ExecTime TIME,
+    GrossProceeds NUMERIC,
+    NetProceeds NUMERIC
+);

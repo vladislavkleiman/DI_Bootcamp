@@ -1,28 +1,31 @@
-import React, { useState } from "react";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemButton,
-  IconButton,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
+import React, { useEffect, useState } from "react";
 
-import AddIcon from "@mui/icons-material/Add";
+const DayStatisticComponent = () => {
+  const [data, setData] = useState([]);
 
-<Button
-  variant="contained"
-  color="primary"
-  startIcon={<AddIcon />}
-  onClick={() => handleDialogOpen()}
-  style={{ backgroundColor: "black" }}
->
-  Add Note
-</Button>;
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        "http://localhost:5000/profitdiary/calendar/"
+      );
+      const data = await response.json();
+      setData(data);
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      {data.map((row, index) => (
+        <div key={index}>
+          <p>
+            {row.DateTrades} - {row.Currency} - {row.Price} ...
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default DayStatisticComponent;

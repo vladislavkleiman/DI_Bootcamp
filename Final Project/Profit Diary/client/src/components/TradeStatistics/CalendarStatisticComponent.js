@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Badge, Calendar, Drawer } from "antd";
 import AddIcon from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
@@ -101,13 +101,53 @@ const CalendarStatisticComponent = () => {
     transition: "filter 0.3s",
   };
 
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      alert("Please select a file first!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/profitdiary/calendar/",
+        {
+          method: "POST", // Change this to POST or PUT as per your server configuration
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      try {
+        const result = await response.json();
+        alert(result.message);
+      } catch (e) {
+        console.error("Response is not in JSON format:", e);
+        alert("Error processing response");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Error uploading file");
+    }
+  };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
-      // TODO: Upload the file or process it here
     }
   };
+
+  useEffect(() => {
+    if (selectedFile) {
+      handleFileUpload();
+    }
+  }, [selectedFile]);
 
   const triggerFileInput = () => {
     fileInputRef.current.click();

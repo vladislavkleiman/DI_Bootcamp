@@ -1,3 +1,31 @@
+const { db } = require("../config/db.js");
+const moment = require("moment");
+
+const formatDate = (dateString) => {
+  return moment(dateString, "MM/DD/YYYY").format("YYYY-MM-DD");
+};
+
+const formatTime = (excelTime) => {
+  if (typeof excelTime === "number") {
+    // Check if the input is a number
+    // Convert Excel time (fraction of a day) to milliseconds since start of day
+    const millisecondsInADay = 24 * 60 * 60 * 1000;
+    const millisecondsSinceStartOfDay = excelTime * millisecondsInADay;
+
+    // Create a date object at the start of the day
+    const startOfDay = new Date(0, 0, 0);
+
+    // Add the milliseconds since the start of the day to the date object
+    startOfDay.setMilliseconds(millisecondsSinceStartOfDay);
+
+    // Format the date object as a time string
+    return moment(startOfDay).format("HH:mm:ss");
+  } else {
+    // If it's not a number, assume it's already a time string
+    return moment(excelTime, "HH:mm:ss").format("HH:mm:ss");
+  }
+};
+
 const XLSX = require("xlsx");
 
 const readExcelFile = (filePath) => {
@@ -10,18 +38,17 @@ const readExcelFile = (filePath) => {
 const insertDataFromExcel = async (filePath) => {
   const data = readExcelFile(filePath);
 
-  const formattedData = data.map((row) => ({
-    DateTrades: row["Date Trades"], // Adjust the key to match your database column name
-    Currency: row["Currency"],
-    Type: parseInt(row["Type"], 10), // Assuming Type is an integer
-    Side: row["Side"],
-    Symbol: row["Symbol"],
-    Qty: parseInt(row["Qty"], 10), // Assuming Qty is an integer
-    Price: parseFloat(row["Price"]), // Assuming Price is a numeric
-    ExecTime: row["Exec Time"], // Make sure the format matches your database
-    Comm: parseFloat(row["Comm"]), // Assuming Comm is a numeric
-    GrossProceeds: parseFloat(row["Gross Proceeds"]), // Assuming GrossProceeds is a numeric
-    NetProceeds: parseFloat(row["Net Proceeds"]), // Assuming NetProceeds is a numeric
+  const formattedData = data.map((raw) => ({
+    datetrades: formatDate(raw["Date Trades"]), // Convert to 'YYYY-MM-DD' format
+    currency: raw["Currency"],
+    type: parseInt(raw["Type"]),
+    side: raw["Side"],
+    symbol: raw["Symbol"],
+    qty: parseInt(raw["Qty"]),
+    price: parseFloat(raw["Price"]).toFixed(2),
+    exectime: formatTime(raw["Exec Time"]),
+    grossproceeds: parseFloat(raw["Gross Proceeds"]).toFixed(2),
+    netproceeds: parseFloat(raw["Net Proceeds"]).toFixed(2),
   }));
 
   try {
@@ -31,6 +58,22 @@ const insertDataFromExcel = async (filePath) => {
     return insertedRows;
   } catch (error) {
     console.error("Error inserting data into database:", error);
+    // Log more details if needed
+    console.error("Error Details:", {
+      message: error.message,
+      stack: error.stack,
+      // Include any other relevant information about the error
+    });
+
     throw error;
   }
+};
+
+const getTradesData = () => {
+  return db("trades").select("*");
+};
+
+module.exports = {
+  insertDataFromExcel,
+  getTradesData,
 };
