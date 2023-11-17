@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Badge, Calendar, Drawer } from "antd";
+import AddIcon from "@mui/icons-material/Add";
+import { Button } from "@mui/material";
 
 const getListData = (value) => {
   let listData;
@@ -77,6 +79,8 @@ const getMonthData = (value) => {
 const CalendarStatisticComponent = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
 
   const calendarStyle = {
     width: "1400px", // Adjust the width as needed
@@ -95,6 +99,18 @@ const CalendarStatisticComponent = () => {
   const blurStyle = {
     filter: sidebarVisible ? "blur(4px)" : "none",
     transition: "filter 0.3s",
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      // TODO: Upload the file or process it here
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
   };
 
   const onSelect = (value) => {
@@ -148,9 +164,44 @@ const CalendarStatisticComponent = () => {
         onClose={() => setSidebarVisible(false)}
         visible={sidebarVisible}
       >
-        <p>
-          Details for {selectedDate ? selectedDate.format("YYYY-MM-DD") : ""}
-        </p>
+        <div
+          className="formStatisticInCalendar"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+            alignItems: "center",
+          }}
+        >
+          <p>
+            Details statistic for{" "}
+            {selectedDate ? selectedDate.format("YYYY-MM-DD") : ""}
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              style={{ backgroundColor: "black" }}
+              onClick={triggerFileInput}
+            >
+              Add Statistic
+            </Button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              accept=".xlsx"
+              onChange={handleFileChange}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              style={{ backgroundColor: "black" }}
+            >
+              View Day
+            </Button>
+          </p>
+        </div>
       </Drawer>
     </div>
   );

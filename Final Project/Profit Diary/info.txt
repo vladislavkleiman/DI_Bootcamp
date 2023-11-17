@@ -6,3 +6,21 @@ CREATE TABLE users (
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
+
+create table trades:
+
+CREATE TABLE trades (
+    id_trades SERIAL PRIMARY KEY,
+    DateTrades DATE,
+    Currency TEXT,
+    Type INTEGER,
+    Side TEXT,
+    Symbol TEXT,
+    Qty INTEGER,
+    Price NUMERIC,
+    ExecTime TIME,
+    Comm NUMERIC,
+    GrossProceeds NUMERIC,
+    NetProceeds NUMERIC
+);
+
