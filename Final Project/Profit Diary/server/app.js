@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+
+const tradeStaticRoute = require("./routers/tradeStatic.route");
 
 const { authRouter } = require("./routers/auth.route");
 const {
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/profitdiary/auth", authRouter);
 app.use("/profitdiary/calendar", downloadTradesFromXLSXRouter);
+app.use("/profitdiary", tradeStaticRoute);
 app.use((error, req, res, next) => {
   console.error("Unhandled error:", error);
   res.status(500).send("Something broke!");

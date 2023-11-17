@@ -7,21 +7,15 @@ const formatDate = (dateString) => {
 
 const formatTime = (excelTime) => {
   if (typeof excelTime === "number") {
-    // Check if the input is a number
-    // Convert Excel time (fraction of a day) to milliseconds since start of day
     const millisecondsInADay = 24 * 60 * 60 * 1000;
     const millisecondsSinceStartOfDay = excelTime * millisecondsInADay;
 
-    // Create a date object at the start of the day
     const startOfDay = new Date(0, 0, 0);
 
-    // Add the milliseconds since the start of the day to the date object
     startOfDay.setMilliseconds(millisecondsSinceStartOfDay);
 
-    // Format the date object as a time string
     return moment(startOfDay).format("HH:mm:ss");
   } else {
-    // If it's not a number, assume it's already a time string
     return moment(excelTime, "HH:mm:ss").format("HH:mm:ss");
   }
 };
@@ -39,10 +33,9 @@ const insertDataFromExcel = async (filePath) => {
   const data = readExcelFile(filePath);
 
   const formattedData = data.map((raw) => ({
-    datetrades: formatDate(raw["Date Trades"]), // Convert to 'YYYY-MM-DD' format
+    datetrades: formatDate(raw["Date Trades"]),
     currency: raw["Currency"],
-    type: parseInt(raw["Type"]),
-    side: raw["Side"],
+    side: raw["Side"].charAt(0),
     symbol: raw["Symbol"],
     qty: parseInt(raw["Qty"]),
     price: parseFloat(raw["Price"]).toFixed(2),
@@ -54,15 +47,14 @@ const insertDataFromExcel = async (filePath) => {
   try {
     const insertedRows = await db("trades")
       .insert(formattedData)
-      .returning("*"); // Returning all columns
+      .returning("*");
     return insertedRows;
   } catch (error) {
     console.error("Error inserting data into database:", error);
-    // Log more details if needed
+
     console.error("Error Details:", {
       message: error.message,
       stack: error.stack,
-      // Include any other relevant information about the error
     });
 
     throw error;
