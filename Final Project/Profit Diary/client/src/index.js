@@ -8,6 +8,7 @@ import SideBar from "./components/Main/SideBar";
 import InfoAboutStockComponent from "./components/InfoAboutCompany/InfoAboutStockComponent";
 import GeneralStatisticComponent from "./components/TradeStatistics/GeneralStatisticComponent";
 import NoteDiaryComponent from "./components/Diary/NoteDiaryComponent";
+import DayStatisticComponent from "./components/TradeStatistics/DayStatisticComponent";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -26,6 +27,7 @@ root.render(
           path="/info-about-stocks"
           element={<InfoAboutStockComponent />}
         />
+        <Route path="/daystatistic" element={<DayStatisticComponent />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Badge, Calendar, Drawer } from "antd";
 import AddIcon from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const getListData = (value) => {
   let listData;
@@ -114,7 +115,7 @@ const CalendarStatisticComponent = () => {
       const response = await fetch(
         "http://localhost:5000/profitdiary/calendar/",
         {
-          method: "POST", // Change this to POST or PUT as per your server configuration
+          method: "POST",
           body: formData,
         }
       );
@@ -133,6 +134,8 @@ const CalendarStatisticComponent = () => {
     } catch (error) {
       console.error("Error uploading file:", error);
       alert("Error uploading file");
+    } finally {
+      setSelectedFile(null);
     }
   };
 
@@ -140,6 +143,8 @@ const CalendarStatisticComponent = () => {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
+    } else {
+      setSelectedFile(null);
     }
   };
 
@@ -148,6 +153,12 @@ const CalendarStatisticComponent = () => {
       handleFileUpload();
     }
   }, [selectedFile]);
+
+  const navigate = useNavigate();
+
+  const viewDay = () => {
+    navigate("/daystatistic");
+  };
 
   const triggerFileInput = () => {
     fileInputRef.current.click();
@@ -202,7 +213,7 @@ const CalendarStatisticComponent = () => {
         }`}
         placement="right"
         onClose={() => setSidebarVisible(false)}
-        visible={sidebarVisible}
+        open={sidebarVisible}
       >
         <div
           className="formStatisticInCalendar"
@@ -237,6 +248,7 @@ const CalendarStatisticComponent = () => {
               color="primary"
               startIcon={<AddIcon />}
               style={{ backgroundColor: "black" }}
+              onClick={viewDay}
             >
               View Day
             </Button>

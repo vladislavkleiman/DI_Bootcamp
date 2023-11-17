@@ -8,6 +8,6 @@ const {
 } = require("../controllers/downloadTradesFromXLSX.controller.js");
 
 downloadTradesFromXLSXRouter.post("/", upload.single("file"), insertTradeData);
-downloadTradesFromXLSXRouter.get("/", getAllTradesData);
+downloadTradesFromXLSXRouter.get("/daystatistic", getAllTradesData);
 
 module.exports = { downloadTradesFromXLSXRouter };

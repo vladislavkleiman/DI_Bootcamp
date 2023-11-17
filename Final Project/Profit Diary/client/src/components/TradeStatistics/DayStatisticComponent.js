@@ -1,29 +1,42 @@
 import React, { useEffect, useState } from "react";
 
 const DayStatisticComponent = () => {
-  const [data, setData] = useState([]);
+  const [dataTrades, setDataTrades] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        "http://localhost:5000/profitdiary/calendar/"
-      );
-      const data = await response.json();
-      setData(data);
+      try {
+        const response = await fetch(
+          "http://localhost:5000/profitdiary/calendar/daystatistic"
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const dataTrades = await response.json();
+        console.log(dataTrades);
+        setDataTrades(dataTrades);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
     fetchData();
   }, []);
 
   return (
-    <div>
-      {data.map((row, index) => (
-        <div key={index}>
-          <p>
-            {row.DateTrades} - {row.Currency} - {row.Price} ...
-          </p>
-        </div>
-      ))}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      {dataTrades.data &&
+        dataTrades.data.map((item, index) => (
+          <div key={index}>
+            <p>Price: {item.price}</p>
+          </div>
+        ))}
     </div>
   );
 };
