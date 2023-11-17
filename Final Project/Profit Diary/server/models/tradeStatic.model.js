@@ -1,7 +1,7 @@
 const { db } = require("../config/db.js");
 
 async function calculateProfit() {
-  // Fetch all trades from the database, sorted by Symbol and DateTrades
+  // Fetch all trades from the database, sorted by symbol and DateTrades
   const trades = await db
     .select("*")
     .from("trades")
@@ -11,7 +11,7 @@ async function calculateProfit() {
   let positions = {};
 
   trades.forEach((trade) => {
-    const { Symbol: symbol, Qty: qty, Price: price, Side: side } = trade;
+    const { symbol, qty, price, side } = trade; // Assuming these are the correct column names
 
     // Initialize the stock position if it doesn't exist
     if (!positions[symbol]) {
@@ -20,30 +20,25 @@ async function calculateProfit() {
 
     // Update position
     if (side === "B") {
-      // Buy
       positions[symbol].qty += qty;
       positions[symbol].buyCost += qty * price;
     } else if (side === "S") {
-      // Sell
       positions[symbol].qty -= qty;
       positions[symbol].sellRevenue += qty * price;
     }
 
-    // Check if position is closed
-    if (positions[symbol].qty === 0) {
-      // Calculate profit for this closed position
+    // Check if position is closed and there was a trade
+    if (
+      positions[symbol].qty === 0 &&
+      (positions[symbol].buyCost > 0 || positions[symbol].sellRevenue > 0)
+    ) {
       let profit = positions[symbol].sellRevenue - positions[symbol].buyCost;
 
-      // Store the result
       if (!results[symbol]) {
         results[symbol] = [];
       }
-      results[symbol].push({
-        symbol,
-        profit: profit.toFixed(2),
-      });
+      results[symbol].push({ symbol, profit: profit.toFixed(2) });
 
-      // Reset position for the next trade sequence
       positions[symbol] = { qty: 0, buyCost: 0, sellRevenue: 0 };
     }
   });
@@ -51,4 +46,6 @@ async function calculateProfit() {
   return results;
 }
 
-module.exports = { calculateProfit };
+module.exports = {
+  calculateProfit,
+};
