@@ -7,28 +7,43 @@ import {
   DialogTitle,
   TextField,
   List,
-  ListItemButton,
+  ListItem,
   ListItemText,
-  Collapse,
+  ListItemButton,
+  IconButton,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
-
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 const NoteDiaryComponent = () => {
-  // Initialize with a sample note
   const [notes, setNotes] = useState([
     { title: "Sample Note", content: "This is a sample note content." },
   ]);
   const [openDialog, setOpenDialog] = useState(false);
   const [newNote, setNewNote] = useState({ title: "", content: "" });
+  const [editingNoteIndex, setEditingNoteIndex] = useState(null);
   const [expandedNote, setExpandedNote] = useState(null);
+  const [bold, setBold] = useState(false);
+  const [italic, setItalic] = useState(false);
+  const [underline, setUnderline] = useState(false);
 
-  const handleDialogOpen = () => {
+  const handleDialogOpen = (index = null) => {
+    if (index !== null) {
+      setNewNote(notes[index]);
+      setEditingNoteIndex(index);
+    } else {
+      setNewNote({ title: "", content: "" });
+    }
     setOpenDialog(true);
   };
 
   const handleDialogClose = () => {
     setOpenDialog(false);
+    setEditingNoteIndex(null);
   };
 
   const handleNoteChange = (e) => {
@@ -36,13 +51,31 @@ const NoteDiaryComponent = () => {
   };
 
   const saveNote = () => {
-    setNotes([...notes, newNote]);
-    setNewNote({ title: "", content: "" });
+    if (editingNoteIndex !== null) {
+      const updatedNotes = [...notes];
+      updatedNotes[editingNoteIndex] = newNote;
+      setNotes(updatedNotes);
+    } else {
+      setNotes([...notes, newNote]);
+    }
     handleDialogClose();
+  };
+
+  const deleteNote = (index) => {
+    const updatedNotes = notes.filter((_, noteIndex) => noteIndex !== index);
+    setNotes(updatedNotes);
   };
 
   const toggleNote = (index) => {
     setExpandedNote(expandedNote === index ? null : index);
+  };
+
+  const applyStyle = () => {
+    let style = {};
+    if (bold) style.fontWeight = "bold";
+    if (italic) style.fontStyle = "italic";
+    if (underline) style.textDecoration = "underline";
+    return style;
   };
 
   return (
@@ -59,14 +92,16 @@ const NoteDiaryComponent = () => {
         variant="contained"
         color="primary"
         startIcon={<AddIcon />}
-        onClick={handleDialogOpen}
+        onClick={() => handleDialogOpen()}
         style={{ backgroundColor: "black" }}
       >
         Add Note
       </Button>
 
       <Dialog open={openDialog} onClose={handleDialogClose}>
-        <DialogTitle>Add a New Note</DialogTitle>
+        <DialogTitle>
+          {editingNoteIndex !== null ? "Edit Note" : "Add a New Note"}
+        </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -93,6 +128,37 @@ const NoteDiaryComponent = () => {
             value={newNote.content}
             onChange={handleNoteChange}
           />
+          <div>
+            <FormControlLabel
+              control={
+                <Checkbox checked={bold} onChange={() => setBold(!bold)} />
+              }
+              label="Bold"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={italic}
+                  onChange={() => setItalic(!italic)}
+                />
+              }
+              label="Italic"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={underline}
+                  onChange={() => setUnderline(!underline)}
+                />
+              }
+              label="Underline"
+            />
+            {/* Implement list conversion and file upload here */}
+            <IconButton color="primary" component="label">
+              <AttachFileIcon />
+              <input type="file" hidden />
+            </IconButton>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
@@ -102,14 +168,35 @@ const NoteDiaryComponent = () => {
 
       <List>
         {notes.map((note, index) => (
-          <React.Fragment key={index}>
+          <ListItem
+            key={index}
+            secondaryAction={
+              <>
+                <IconButton
+                  edge="end"
+                  aria-label="edit"
+                  onClick={() => handleDialogOpen(index)}
+                >
+                  <EditIcon />
+                </IconButton>
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={() => deleteNote(index)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </>
+            }
+          >
             <ListItemButton onClick={() => toggleNote(index)}>
-              <ListItemText primary={note.title} />
+              <ListItemText
+                primary={note.title}
+                secondary={note.content}
+                style={applyStyle()}
+              />
             </ListItemButton>
-            <Collapse in={expandedNote === index} timeout="auto" unmountOnExit>
-              <ListItemText inset secondary={note.content} />
-            </Collapse>
-          </React.Fragment>
+          </ListItem>
         ))}
       </List>
     </div>
