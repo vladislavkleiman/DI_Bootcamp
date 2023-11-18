@@ -157,7 +157,13 @@ const CalendarStatisticComponent = () => {
   const navigate = useNavigate();
 
   const viewDay = () => {
-    navigate("/daystatistic");
+    if (selectedDate) {
+      navigate(`/daystatistic`, {
+        state: { date: selectedDate.format("YYYY-MM-DD") },
+      });
+    } else {
+      alert("Please select a date first!");
+    }
   };
 
   const triggerFileInput = () => {

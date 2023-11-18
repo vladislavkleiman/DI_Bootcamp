@@ -61,8 +61,14 @@ const insertDataFromExcel = async (filePath) => {
   }
 };
 
-const getTradesData = () => {
-  return db("tradestransaction").select("*");
+const getTradesData = (date) => {
+  if (date) {
+    return db("tradestransaction")
+      .select("*")
+      .whereRaw("DATE(datetrades) = ?", [date]); // Filter by the provided date
+  } else {
+    return db("tradestransaction").select("*"); // If no date is provided, return all data
+  }
 };
 
 module.exports = {

@@ -37,7 +37,7 @@ const TradeTable = ({ trades }) => {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {trade.date} {/* Assuming trade object has a date property */}
+                  {trade.date}
                 </TableCell>
                 <TableCell align="right">{trade.symbol}</TableCell>
                 <TableCell align="right">{trade.tradeType}</TableCell>

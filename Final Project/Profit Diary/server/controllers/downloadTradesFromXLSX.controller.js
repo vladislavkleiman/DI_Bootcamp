@@ -21,8 +21,9 @@ const insertTradeData = async (req, res) => {
 };
 
 const getAllTradesData = async (req, res) => {
+  const { date } = req.query; // Get the date from query parameters
   try {
-    const trades = await getTradesData();
+    const trades = await getTradesData(date); // Pass the date to the model function
     res
       .status(200)
       .json({ message: "Data fetched successfully", data: trades });

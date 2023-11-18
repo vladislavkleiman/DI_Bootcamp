@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import TradeTable from "./TradesTableComponent";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const DayStatisticComponent = () => {
   const [dataTrades, setDataTrades] = useState({});
   const [error, setError] = useState(null);
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
+  const location = useLocation();
+  const selectedDate = location.state?.date;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/profitdiary/daystatistic"
+          `http://localhost:5000/profitdiary/daystatistic?date=${selectedDate}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -18,6 +21,7 @@ const DayStatisticComponent = () => {
         const data = await response.json();
         setDataTrades(data);
         setIsInitialLoadComplete(true);
+        console.log(dataTrades);
       } catch (error) {
         console.error("Error:", error);
         setError(error.message);
@@ -27,7 +31,7 @@ const DayStatisticComponent = () => {
     if (!isInitialLoadComplete) {
       fetchData();
     }
-  }, [isInitialLoadComplete]);
+  }, [isInitialLoadComplete, selectedDate]);
 
   useEffect(() => {
     if (Object.keys(dataTrades).length > 0) {
@@ -40,6 +44,7 @@ const DayStatisticComponent = () => {
     return Object.entries(data).flatMap(([symbol, trades]) =>
       trades.map((trade) => ({
         date: formatDate(trade.tradeDate),
+
         symbol: symbol,
         tradeType: trade.tradeType,
         profit: trade.profit,
@@ -48,8 +53,15 @@ const DayStatisticComponent = () => {
   };
 
   const formatDate = (dateString) => {
+    // Create a Date object from the dateString
     const date = new Date(dateString);
-    return date.toISOString().split("T")[0];
+
+    // Format the date as YYYY-MM-DD
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed
+    const day = date.getDate().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
   };
 
   const sendTradesToServer = async (flattenedTrades) => {

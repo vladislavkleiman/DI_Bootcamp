@@ -77,7 +77,7 @@ async function loadTradesIntoDatabase(flattenedTrades) {
   try {
     for (const trade of flattenedTrades) {
       await db("trades").insert({
-        trade_date: trade.tradeDate,
+        trade_date: trade.date,
         stock_ticker: trade.symbol,
         trade_type: trade.tradeType,
         profit_loss: trade.profit,
