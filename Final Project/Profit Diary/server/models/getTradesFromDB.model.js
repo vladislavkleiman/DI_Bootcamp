@@ -5,11 +5,11 @@ const getTradesFromDB = async (selectedDate) => {
   try {
     const trades = await db("trades")
       .select("*")
-      .where("tradedate", "=", selectedDate);
+      .where("trade_date", "=", selectedDate);
     console.log("Selected Date in Model:", selectedDate);
     console.log("Trades:", trades); // Log the trades for debugging
-    return trades;
     console.log(trades);
+    return trades;
   } catch (error) {
     console.error("Error fetching trades from the database:", error);
     throw error;

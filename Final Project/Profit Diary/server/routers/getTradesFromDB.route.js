@@ -4,6 +4,6 @@ const {
   getTradesController,
 } = require("../controllers/getTradesFromDB.controller.js");
 
-getTradesRouter.get("/", getTradesController);
+getTradesRouter.get("/:datetrade", getTradesController);
 
 module.exports = { getTradesRouter };

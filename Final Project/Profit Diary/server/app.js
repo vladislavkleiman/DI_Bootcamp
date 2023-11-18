@@ -11,6 +11,10 @@ const { getTradesRouter } = require("./routers/getTradesFromDB.route.js");
 
 const app = express();
 
+app.use((req, res, next) => {
+  console.log("Incoming request:", req.path);
+  next();
+});
 app.use(express.static("client"));
 app.use(express.json());
 app.use(cors());

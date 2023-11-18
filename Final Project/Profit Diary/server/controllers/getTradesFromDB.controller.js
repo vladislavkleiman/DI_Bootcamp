@@ -17,7 +17,6 @@ const getTradesController = async (req, res) => {
       tradeType: trade.trade_type,
       tradeDate: trade.trade_date.toISOString(),
     }));
-    console.log(trades);
 
     res.json(trades);
   } catch (error) {
