@@ -1,9 +1,6 @@
-// tradeStatic.route.js
-
 const express = require("express");
-const router = express.Router();
-const { getProfit } = require("../controllers/calculateProfitController"); // Adjust the path as needed
+const tradeStaticRoute = express.Router();
+const { getProfit } = require("../controllers/calculateProfitController");
+tradeStaticRoute.get("/daystatistic", getProfit);
 
-router.get("/daystatistic", getProfit);
-
-module.exports = router;
+module.exports = { tradeStaticRoute };

@@ -73,6 +73,47 @@ async function calculateProfit() {
   return results;
 }
 
+async function loadTradesIntoDatabase(flattenedTrades) {
+  try {
+    for (const trade of flattenedTrades) {
+      await db("trades").insert({
+        trade_date: trade.tradeDate,
+        stock_ticker: trade.symbol,
+        trade_type: trade.tradeType,
+        profit_loss: trade.profit,
+      });
+    }
+    console.log("All trades have been successfully loaded into the database.");
+  } catch (error) {
+    console.error("Error loading trades into the database:", error);
+  }
+}
+
+async function removeDuplicateTrades() {
+  try {
+    // Use a CTE to find duplicates and keep only the first instance of each duplicate set
+    await db.raw(`
+      WITH duplicates AS (
+        SELECT id_trades,
+               ROW_NUMBER() OVER (
+                 PARTITION BY trade_date, stock_ticker, trade_type, profit_loss 
+                 ORDER BY id_trades
+               ) as row_num
+        FROM trades
+      )
+      DELETE FROM trades
+      WHERE id_trades IN (
+        SELECT id_trades FROM duplicates WHERE row_num > 1
+      )
+    `);
+    console.log("Duplicate trades removed successfully.");
+  } catch (error) {
+    console.error("Error removing duplicate trades:", error);
+  }
+}
+
 module.exports = {
   calculateProfit,
+  loadTradesIntoDatabase,
+  removeDuplicateTrades,
 };

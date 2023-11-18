@@ -1,13 +1,12 @@
 БД зарегана на почту: ustradingstockmarketspynsdq@gmail.com
 
-create table users:
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
 
-create table trades:
 
 
 CREATE TABLE tradestransaction (
@@ -22,3 +21,12 @@ CREATE TABLE tradestransaction (
     GrossProceeds NUMERIC,
     NetProceeds NUMERIC
 );
+
+CREATE TABLE trades (
+    id_trades SERIAL PRIMARY KEY,
+    trade_date DATE,
+    stock_ticker TEXT,
+    trade_type TEXT,
+    profit_loss VARCHAR
+);
+
