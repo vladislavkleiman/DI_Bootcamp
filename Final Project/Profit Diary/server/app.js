@@ -18,11 +18,11 @@ app.use((req, res, next) => {
 app.use(express.static("client"));
 app.use(express.json());
 app.use(cors());
+app.use("/profitdiary/daystatistic", getTradesRouter);
 app.use("/profitdiary/auth", authRouter);
 app.use("/profitdiary/calendar", downloadTradesFromXLSXRouter);
 app.use("/profitdiary", tradeStaticRoute);
 app.use("/profitdiary/api", tradesRouter);
-app.use("/profitdiary/daystatistic", getTradesRouter);
 
 app.use((error, req, res, next) => {
   console.error("Unhandled error:", error);

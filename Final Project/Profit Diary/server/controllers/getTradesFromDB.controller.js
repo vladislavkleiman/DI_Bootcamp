@@ -1,7 +1,7 @@
-const { getTradesFromDB } = require("../models/getTradesFromDB.model");
+const { getTradesFromDB } = require("../models/getTradesFromDB.model.js");
 
 const getTradesController = async (req, res) => {
-  console.log("Request received controller");
+  console.log("Request received in getTradesController");
   try {
     const isoDateTime = req.query.datetrade;
     const selectedDate = new Date(isoDateTime).toISOString().split("T")[0];

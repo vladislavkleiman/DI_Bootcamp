@@ -30,6 +30,7 @@ const DayStatisticComponent = () => {
         const data = await response.json();
         setDataTrades(data);
         setIsInitialLoadComplete(true);
+        console.log("Received Data:", data);
       } catch (error) {
         console.error("Error:", error);
         setError(error.message);
