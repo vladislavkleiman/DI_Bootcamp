@@ -3,7 +3,8 @@ import TradeTable from "./TradesTableComponent";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const DayStatisticComponent = () => {
-  const [dataTrades, setDataTrades] = useState({});
+  const [dataTrades, setDataTrades] = useState([]);
+
   const [error, setError] = useState(null);
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
   const location = useLocation();
@@ -47,15 +48,21 @@ const DayStatisticComponent = () => {
     }
   }, [dataTrades]);
 
+  useEffect(() => {
+    if (dataTrades.length > 0) {
+      const flattenedTrades = flattenTrades(dataTrades);
+      sendTradesToServer(flattenedTrades);
+    }
+  }, [dataTrades]);
+
   const flattenTrades = (data) => {
-    return Object.entries(data).flatMap(([symbol, trades]) =>
-      trades.map((trade) => ({
-        date: formatDate(trade.tradeDate),
-        symbol: symbol,
-        tradeType: trade.tradeType,
-        profit: trade.profit,
-      }))
-    );
+    // Since data is already an array of trade objects, you can directly map over it
+    return data.map((trade) => ({
+      date: formatDate(trade.tradeDate),
+      symbol: trade.symbol,
+      tradeType: trade.tradeType,
+      profit: trade.profit,
+    }));
   };
 
   const formatDate = (dateString) => {

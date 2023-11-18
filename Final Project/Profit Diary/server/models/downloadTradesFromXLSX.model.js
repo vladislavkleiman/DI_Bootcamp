@@ -51,12 +51,7 @@ const insertDataFromExcel = async (filePath) => {
     return insertedRows;
   } catch (error) {
     console.error("Error inserting data into database:", error);
-
-    console.error("Error Details:", {
-      message: error.message,
-      stack: error.stack,
-    });
-
+    console.error("Formatted Data:", formattedData); // Log the formatted data to inspect
     throw error;
   }
 };
