@@ -158,11 +158,8 @@ const CalendarStatisticComponent = () => {
 
   const viewDay = () => {
     if (selectedDate) {
-      navigate(`/daystatistic`, {
-        state: { date: selectedDate.format("YYYY-MM-DD") },
-      });
-    } else {
-      alert("Please select a date first!");
+      const formattedDate = selectedDate.format("YYYY-MM-DD");
+      navigate("/daystatistic", { state: { date: formattedDate } });
     }
   };
 

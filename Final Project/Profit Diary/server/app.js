@@ -7,6 +7,7 @@ const {
 } = require("./routers/downloadTradesFromXLSX.route.js");
 const { tradesRouter } = require("./routers/trades.route.js");
 const { tradeStaticRoute } = require("./routers/tradeStatic.route.js");
+const { getTradesRouter } = require("./routers/getTradesFromDB.route.js");
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use("/profitdiary/auth", authRouter);
 app.use("/profitdiary/calendar", downloadTradesFromXLSXRouter);
 app.use("/profitdiary", tradeStaticRoute);
 app.use("/profitdiary/api", tradesRouter);
+app.use("/profitdiary/daystatistic", getTradesRouter);
+
 app.use((error, req, res, next) => {
   console.error("Unhandled error:", error);
   res.status(500).send("Something broke!");

@@ -7,13 +7,22 @@ const DayStatisticComponent = () => {
   const [error, setError] = useState(null);
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
   const location = useLocation();
-  const selectedDate = location.state?.date;
+  const selectedDate = location.state?.date || "default-date-value";
 
   useEffect(() => {
+    if (!selectedDate) {
+      console.error("No selected date provided");
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/profitdiary/daystatistic?date=${selectedDate}`
+          `http://localhost:5000/profitdiary/daystatistic?datetrade=${selectedDate}`
+        );
+        console.log(
+          "Fetch URL:",
+          `http://localhost:5000/profitdiary/daystatistic?datetrade=${selectedDate}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -21,17 +30,14 @@ const DayStatisticComponent = () => {
         const data = await response.json();
         setDataTrades(data);
         setIsInitialLoadComplete(true);
-        console.log(dataTrades);
       } catch (error) {
         console.error("Error:", error);
         setError(error.message);
       }
     };
 
-    if (!isInitialLoadComplete) {
-      fetchData();
-    }
-  }, [isInitialLoadComplete, selectedDate]);
+    fetchData();
+  }, [selectedDate]);
 
   useEffect(() => {
     if (Object.keys(dataTrades).length > 0) {
@@ -44,7 +50,6 @@ const DayStatisticComponent = () => {
     return Object.entries(data).flatMap(([symbol, trades]) =>
       trades.map((trade) => ({
         date: formatDate(trade.tradeDate),
-
         symbol: symbol,
         tradeType: trade.tradeType,
         profit: trade.profit,
@@ -53,14 +58,10 @@ const DayStatisticComponent = () => {
   };
 
   const formatDate = (dateString) => {
-    // Create a Date object from the dateString
     const date = new Date(dateString);
-
-    // Format the date as YYYY-MM-DD
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
-
     return `${year}-${month}-${day}`;
   };
 
@@ -110,6 +111,9 @@ const DayStatisticComponent = () => {
       console.error("Error removing duplicates:", error);
     }
   };
+
+  console.log("Location State:", location.state);
+  console.log("Selected Date:", selectedDate);
 
   if (error) {
     return <div>Error: {error}</div>;
