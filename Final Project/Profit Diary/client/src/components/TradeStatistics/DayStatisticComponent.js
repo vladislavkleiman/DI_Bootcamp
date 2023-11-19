@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TradeTable from "./TradesTableComponent";
+import ProfitChartComponent from "./ProfitChartComponent";
 import { useLocation } from "react-router-dom";
 
 const DayStatisticComponent = () => {
@@ -90,7 +91,9 @@ const DayStatisticComponent = () => {
         alignItems: "center",
       }}
     >
+      <ProfitChartComponent trades={flattenTrades(dataTrades)} />
       <TradeTable trades={flattenTrades(dataTrades)} />
+
       {/* Buttons or triggers to manually call sendTradesToServer or removeDuplicates if needed */}
     </div>
   );
