@@ -47,7 +47,8 @@ const DayStatisticComponent = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      fetchData();
+      // Call removeDuplicates after successfully sending trades to the server
+      await removeDuplicates();
     } catch (error) {
       console.error("Error triggering trades processing:", error);
     }
