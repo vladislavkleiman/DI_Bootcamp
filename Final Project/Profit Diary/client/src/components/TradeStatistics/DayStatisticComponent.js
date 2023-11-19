@@ -46,9 +46,6 @@ const DayStatisticComponent = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      // Call removeDuplicates after successfully sending trades to the server
-      await removeDuplicates();
     } catch (error) {
       console.error("Error triggering trades processing:", error);
     }
@@ -57,26 +54,6 @@ const DayStatisticComponent = () => {
   useEffect(() => {
     fetchData();
   }, [selectedDate]);
-
-  const removeDuplicates = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/profitdiary/trades-api/removeDuplicates",
-        {
-          method: "POST",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      // Optionally, fetch updated trades data here
-      fetchData();
-    } catch (error) {
-      console.error("Error removing duplicates:", error);
-    }
-  };
 
   const flattenTrades = (data) => {
     if (!Array.isArray(data)) {
