@@ -60,9 +60,9 @@ const getTradesData = (date) => {
   if (date) {
     return db("tradestransaction")
       .select("*")
-      .whereRaw("DATE(datetrades) = ?", [date]); // Filter by the provided date
+      .whereRaw("DATE(datetrades) = ?", [date]);
   } else {
-    return db("tradestransaction").select("*"); // If no date is provided, return all data
+    return db("tradestransaction").select("*");
   }
 };
 

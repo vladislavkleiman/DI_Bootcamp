@@ -113,7 +113,7 @@ const CalendarStatisticComponent = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/profitdiary/calendar/",
+        "http://localhost:5000/profitdiary/trades-upload",
         {
           method: "POST",
           body: formData,

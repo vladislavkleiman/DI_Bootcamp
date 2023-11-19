@@ -7,6 +7,11 @@ async function calculateProfit() {
     .from("tradestransaction")
     .orderBy(["symbol", "datetrades"]);
 
+  console.log(
+    "calculateProfit: Trades fetched from tradestransaction:",
+    trades
+  );
+
   let results = {};
   let positions = {};
 
@@ -73,20 +78,21 @@ async function calculateProfit() {
   return results;
 }
 
-async function loadTradesIntoDatabase(flattenedTrades) {
-  try {
-    for (const trade of flattenedTrades) {
+async function loadTradesIntoDatabase() {
+  const calculatedTrades = await calculateProfit();
+  console.log("Loading trades into database: ", calculatedTrades);
+
+  for (const symbol in calculatedTrades) {
+    for (const trade of calculatedTrades[symbol]) {
       await db("trades").insert({
-        trade_date: trade.date,
-        stock_ticker: trade.symbol,
+        trade_date: trade.tradeDate,
+        stock_ticker: symbol,
         trade_type: trade.tradeType,
         profit_loss: trade.profit,
       });
     }
-    console.log("All trades have been successfully loaded into the database.");
-  } catch (error) {
-    console.error("Error loading trades into the database:", error);
   }
+  console.log("All trades have been successfully loaded into the database.");
 }
 
 async function removeDuplicateTrades() {
@@ -113,7 +119,6 @@ async function removeDuplicateTrades() {
 }
 
 module.exports = {
-  calculateProfit,
   loadTradesIntoDatabase,
   removeDuplicateTrades,
 };

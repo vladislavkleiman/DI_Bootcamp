@@ -1,62 +1,88 @@
 import React, { useEffect, useState } from "react";
 import TradeTable from "./TradesTableComponent";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const DayStatisticComponent = () => {
   const [dataTrades, setDataTrades] = useState([]);
-
   const [error, setError] = useState(null);
-  const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
   const location = useLocation();
   const selectedDate = location.state?.date || "default-date-value";
 
   useEffect(() => {
+    sendTradesToServer();
+  }, []);
+
+  const fetchData = async () => {
     if (!selectedDate) {
       console.error("No selected date provided");
       return;
     }
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/profitdiary/daystatistic?datetrade=${selectedDate}`
-        );
-        console.log(
-          "Fetch URL:",
-          `http://localhost:5000/profitdiary/daystatistic?datetrade=${selectedDate}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setDataTrades(data);
-        setIsInitialLoadComplete(true);
-        console.log("Received Data:", data);
-      } catch (error) {
-        console.error("Error:", error);
-        setError(error.message);
+    try {
+      const response = await fetch(
+        `http://localhost:5000/profitdiary/daily-trades?datetrade=${selectedDate}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
+      const data = await response.json();
+      setDataTrades(data);
+    } catch (error) {
+      console.error("Error:", error);
+      setError(error.message);
+    }
+  };
 
+  const sendTradesToServer = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/profitdiary/trades-api/loadTrades",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      fetchData();
+    } catch (error) {
+      console.error("Error triggering trades processing:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [selectedDate]);
 
-  useEffect(() => {
-    if (Object.keys(dataTrades).length > 0) {
-      const flattenedTrades = flattenTrades(dataTrades);
-      sendTradesToServer(flattenedTrades);
-    }
-  }, [dataTrades]);
+  const removeDuplicates = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/profitdiary/trades-api/removeDuplicates",
+        {
+          method: "POST",
+        }
+      );
 
-  useEffect(() => {
-    if (dataTrades.length > 0) {
-      const flattenedTrades = flattenTrades(dataTrades);
-      sendTradesToServer(flattenedTrades);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Optionally, fetch updated trades data here
+      fetchData();
+    } catch (error) {
+      console.error("Error removing duplicates:", error);
     }
-  }, [dataTrades]);
+  };
 
   const flattenTrades = (data) => {
-    // Since data is already an array of trade objects, you can directly map over it
+    if (!Array.isArray(data)) {
+      console.error("Expected an array, received:", data);
+      return [];
+    }
+
     return data.map((trade) => ({
       date: formatDate(trade.tradeDate),
       symbol: trade.symbol,
@@ -73,56 +99,6 @@ const DayStatisticComponent = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const sendTradesToServer = async (flattenedTrades) => {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/profitdiary/api/loadTrades",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ flattenedTrades }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log(result.message);
-
-      // Call to remove duplicates
-      await removeDuplicates();
-    } catch (error) {
-      console.error("Error sending trades:", error);
-    }
-  };
-
-  const removeDuplicates = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/profitdiary/api/removeDuplicates",
-        {
-          method: "POST",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log(result.message);
-    } catch (error) {
-      console.error("Error removing duplicates:", error);
-    }
-  };
-
-  console.log("Location State:", location.state);
-  console.log("Selected Date:", selectedDate);
-
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -137,6 +113,7 @@ const DayStatisticComponent = () => {
       }}
     >
       <TradeTable trades={flattenTrades(dataTrades)} />
+      {/* Buttons or triggers to manually call sendTradesToServer or removeDuplicates if needed */}
     </div>
   );
 };
