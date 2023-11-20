@@ -1,15 +1,24 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import "chart.js/auto"; // This is needed for Chart.js 3
+import "chart.js/auto";
 
 const ProfitChartComponent = ({ trades }) => {
-  const emptyLabels = new Array(trades.length).fill("");
+  // Initialize the data array with zero as the starting point
+  let cumulativeProfit = [0];
+
+  // Calculate the cumulative profit
+  trades.forEach((trade) => {
+    // Add the current trade's profit to the last value in the cumulativeProfit array
+    let lastProfit = cumulativeProfit[cumulativeProfit.length - 1];
+    cumulativeProfit.push(lastProfit + parseFloat(trade.profit));
+  });
+
   const chartData = {
-    labels: emptyLabels,
+    labels: new Array(cumulativeProfit.length).fill(""), // Adjust the labels as needed
     datasets: [
       {
-        label: "Profit",
-        data: trades.map((trade) => parseFloat(trade.profit)), // Y-axis data
+        label: "Cumulative Profit",
+        data: cumulativeProfit,
         fill: false,
         backgroundColor: "rgb(75, 192, 192)",
         borderColor: "rgba(75, 192, 192, 0.2)",
@@ -22,8 +31,7 @@ const ProfitChartComponent = ({ trades }) => {
       y: {
         beginAtZero: true,
         ticks: {
-          callback: function (value, index, values) {
-            // Add a dollar sign ($) in front of the number
+          callback: function (value) {
             return "$" + value;
           },
         },
