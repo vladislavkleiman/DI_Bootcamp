@@ -6,12 +6,22 @@ import { useLocation } from "react-router-dom";
 const DayStatisticComponent = () => {
   const [dataTrades, setDataTrades] = useState([]);
   const [error, setError] = useState(null);
+  const [tradesProcessed, setTradesProcessed] = useState(false);
   const location = useLocation();
   const selectedDate = location.state?.date || "default-date-value";
 
   useEffect(() => {
-    sendTradesToServer();
-  }, []);
+    const processAndFetchTrades = async () => {
+      if (!tradesProcessed) {
+        await sendTradesToServer();
+        setTradesProcessed(true);
+      } else {
+        fetchData();
+      }
+    };
+
+    processAndFetchTrades();
+  }, [selectedDate, tradesProcessed]);
 
   const fetchData = async () => {
     if (!selectedDate) {
@@ -51,17 +61,10 @@ const DayStatisticComponent = () => {
         );
       }
       console.log("Trades processed successfully.");
-
-      console.log("Fetching processed data for display...");
-      fetchData();
     } catch (error) {
       console.error("Error in trade processing flow:", error);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [selectedDate]);
 
   const flattenTrades = (data) => {
     if (!Array.isArray(data)) {
@@ -72,7 +75,7 @@ const DayStatisticComponent = () => {
     return data.map((trade) => {
       return {
         date: formatDate(trade.tradeDate),
-        execTime: trade.execTime, // Format the execution time
+        execTime: trade.execTime,
         symbol: trade.symbol,
         tradeType: trade.tradeType,
         profit: trade.profit,
@@ -103,8 +106,6 @@ const DayStatisticComponent = () => {
     >
       <ProfitChartComponent trades={flattenTrades(dataTrades)} />
       <TradeTable trades={flattenTrades(dataTrades)} />
-
-      {/* Buttons or triggers to manually call sendTradesToServer or removeDuplicates if needed */}
     </div>
   );
 };
