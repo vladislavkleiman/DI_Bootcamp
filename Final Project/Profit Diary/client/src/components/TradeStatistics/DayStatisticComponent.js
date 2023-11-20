@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 
 const DayStatisticComponent = () => {
   const [dataTrades, setDataTrades] = useState([]);
+  const [totalProfit, setTotalProfit] = useState(0); // State to store total profit
   const [error, setError] = useState(null);
   const [tradesProcessed, setTradesProcessed] = useState(false);
   const location = useLocation();
@@ -22,6 +23,15 @@ const DayStatisticComponent = () => {
 
     processAndFetchTrades();
   }, [selectedDate, tradesProcessed]);
+
+  useEffect(() => {
+    // Calculate the total profit whenever dataTrades changes
+    const total = dataTrades.reduce(
+      (acc, trade) => acc + parseFloat(trade.profit || 0),
+      0
+    );
+    setTotalProfit(total);
+  }, [dataTrades]);
 
   const fetchData = async () => {
     if (!selectedDate) {
@@ -105,6 +115,9 @@ const DayStatisticComponent = () => {
       }}
     >
       <ProfitChartComponent trades={flattenTrades(dataTrades)} />
+      <div style={{ fontSize: "20px" }}>
+        Profit for day: ${totalProfit.toFixed(2)}
+      </div>
       <TradeTable trades={flattenTrades(dataTrades)} />
     </div>
   );
