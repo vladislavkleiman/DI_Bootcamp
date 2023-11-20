@@ -62,12 +62,18 @@ const DayStatisticComponent = () => {
       return [];
     }
 
-    return data.map((trade) => ({
-      date: formatDate(trade.tradeDate),
-      symbol: trade.symbol,
-      tradeType: trade.tradeType,
-      profit: trade.profit,
-    }));
+    return data.map((trade) => {
+      // Log the execTime for each trade to inspect its format
+      console.log("Exec Time:", trade.execTime);
+
+      return {
+        date: formatDate(trade.tradeDate),
+        execTime: trade.execTime, // Format the execution time
+        symbol: trade.symbol,
+        tradeType: trade.tradeType,
+        profit: trade.profit,
+      };
+    });
   };
 
   const formatDate = (dateString) => {

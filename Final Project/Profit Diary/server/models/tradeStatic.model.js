@@ -5,7 +5,7 @@ async function calculateProfit() {
   const trades = await db
     .select("*")
     .from("tradestransaction")
-    .orderBy(["symbol", "datetrades"]);
+    .orderBy(["exectime"]);
 
   console.log(
     "calculateProfit: Trades fetched from tradestransaction:",
@@ -16,7 +16,7 @@ async function calculateProfit() {
   let positions = {};
 
   trades.forEach((trade) => {
-    const { symbol, qty, price, side, datetrades } = trade; // Ensure these match your column names
+    const { symbol, qty, price, side, datetrades, exectime } = trade; // Ensure these match your column names
 
     // Initialize the stock position if it doesn't exist
     if (!positions[symbol]) {
@@ -61,7 +61,8 @@ async function calculateProfit() {
         symbol,
         profit: profit.toFixed(2),
         tradeType: positions[symbol].firstTradeType,
-        tradeDate: positions[symbol].firstTradeDate, // Add the trade date to the result
+        tradeDate: positions[symbol].firstTradeDate,
+        execTime: exectime, // Add the trade date to the result
       });
 
       // Reset position for the next trade sequence
@@ -86,6 +87,7 @@ async function loadTradesIntoDatabase() {
     for (const trade of calculatedTrades[symbol]) {
       await db("trades").insert({
         trade_date: trade.tradeDate,
+        exectime: trade.execTime,
         stock_ticker: symbol,
         trade_type: trade.tradeType,
         profit_loss: trade.profit,

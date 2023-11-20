@@ -25,6 +25,7 @@ const TradeTable = ({ trades }) => {
           <TableHead>
             <TableRow>
               <TableCell>Trade Date</TableCell>
+              <TableCell align="right">Execution Time</TableCell>
               <TableCell align="right">Stock Ticker</TableCell>
               <TableCell align="right">Trade Type</TableCell>
               <TableCell align="right">Profit/Loss</TableCell>
@@ -39,6 +40,7 @@ const TradeTable = ({ trades }) => {
                 <TableCell component="th" scope="row">
                   {trade.date}
                 </TableCell>
+                <TableCell align="right">{trade.execTime}</TableCell>
                 <TableCell align="right">{trade.symbol}</TableCell>
                 <TableCell align="right">{trade.tradeType}</TableCell>
                 <TableCell align="right">${trade.profit}</TableCell>

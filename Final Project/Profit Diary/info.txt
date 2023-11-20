@@ -30,6 +30,15 @@ CREATE TABLE trades (
     profit_loss VARCHAR
 );
 
+CREATE TABLE trades (
+    id_trades SERIAL PRIMARY KEY,
+    trade_date DATE,
+    exectime TIME,
+    stock_ticker TEXT,
+    trade_type TEXT,
+    profit_loss VARCHAR
+);
+
 логика:
 я загружаю файл иксель, из него выбираются транзакции и добавляются в таблицу трейды транзакции
 

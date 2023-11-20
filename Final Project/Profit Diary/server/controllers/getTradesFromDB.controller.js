@@ -16,6 +16,7 @@ const getTradesController = async (req, res) => {
       profit: trade.profit_loss,
       tradeType: trade.trade_type,
       tradeDate: trade.trade_date.toISOString(),
+      execTime: trade.exectime,
     }));
 
     res.json(trades);
