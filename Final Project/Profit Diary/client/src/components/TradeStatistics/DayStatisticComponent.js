@@ -36,6 +36,7 @@ const DayStatisticComponent = () => {
 
   const sendTradesToServer = async () => {
     try {
+      console.log("Starting to process trades...");
       const response = await fetch(
         "http://localhost:5000/profitdiary/trades-api/loadTrades",
         {
@@ -45,10 +46,16 @@ const DayStatisticComponent = () => {
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(
+          `Error in processing trades. HTTP status: ${response.status}`
+        );
       }
+      console.log("Trades processed successfully.");
+
+      console.log("Fetching processed data for display...");
+      fetchData();
     } catch (error) {
-      console.error("Error triggering trades processing:", error);
+      console.error("Error in trade processing flow:", error);
     }
   };
 
@@ -63,9 +70,6 @@ const DayStatisticComponent = () => {
     }
 
     return data.map((trade) => {
-      // Log the execTime for each trade to inspect its format
-      console.log("Exec Time:", trade.execTime);
-
       return {
         date: formatDate(trade.tradeDate),
         execTime: trade.execTime, // Format the execution time
