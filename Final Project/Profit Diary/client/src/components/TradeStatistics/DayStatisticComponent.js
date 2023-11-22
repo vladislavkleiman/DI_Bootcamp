@@ -25,7 +25,6 @@ const DayStatisticComponent = () => {
   }, [selectedDate, tradesProcessed]);
 
   useEffect(() => {
-    // Calculate the total profit whenever dataTrades changes
     const total = dataTrades.reduce(
       (acc, trade) => acc + parseFloat(trade.profit || 0),
       0
@@ -34,6 +33,11 @@ const DayStatisticComponent = () => {
   }, [dataTrades]);
 
   const fetchData = async () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      console.error("User ID not found.");
+      return;
+    }
     if (!selectedDate) {
       console.error("No selected date provided");
       return;
@@ -41,12 +45,13 @@ const DayStatisticComponent = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/profitdiary/daily-trades?datetrade=${selectedDate}`
+        `http://localhost:5000/profitdiary/daily-trades?datetrade=${selectedDate}&userId=${userId}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      console.log("received data from fetchData in component:", data);
       setDataTrades(data);
     } catch (error) {
       console.error("Error:", error);
@@ -55,13 +60,20 @@ const DayStatisticComponent = () => {
   };
 
   const sendTradesToServer = async () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      console.error("User ID not found.");
+      return;
+    }
     try {
       console.log("Starting to process trades...");
+      console.log("sendTradesToServer user_id:", userId);
       const response = await fetch(
-        "http://localhost:5000/profitdiary/trades-api/loadTrades",
+        `http://localhost:5000/profitdiary/trades-api/loadTrades`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId }),
         }
       );
 

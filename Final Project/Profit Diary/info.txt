@@ -25,9 +25,10 @@ CREATE TABLE tradestransaction (
 
 
 
+
 CREATE TABLE trades (
     id_trades SERIAL PRIMARY KEY,
-    user_id INTEGER,
+    user_id VARCHAR,
     trade_date DATE,
     exectime TIME,
     stock_ticker TEXT,

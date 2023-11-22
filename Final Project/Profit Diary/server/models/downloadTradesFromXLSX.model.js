@@ -29,10 +29,11 @@ const readExcelFile = (filePath) => {
   return XLSX.utils.sheet_to_json(worksheet);
 };
 
-const insertDataFromExcel = async (filePath) => {
+const insertDataFromExcel = async (filePath, userId) => {
   const data = readExcelFile(filePath);
 
   const formattedData = data.map((raw) => ({
+    user_id: parseInt(userId),
     datetrades: formatDate(raw["Date Trades"]),
     currency: raw["Currency"],
     side: raw["Side"].charAt(0),
@@ -51,7 +52,6 @@ const insertDataFromExcel = async (filePath) => {
     return insertedRows;
   } catch (error) {
     console.error("Error inserting data into database:", error);
-    console.error("Formatted Data:", formattedData); // Log the formatted data to inspect
     throw error;
   }
 };

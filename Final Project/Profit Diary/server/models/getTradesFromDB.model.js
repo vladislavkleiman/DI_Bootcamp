@@ -1,6 +1,6 @@
 const { db } = require("../config/db.js");
 
-const getTradesFromDB = async (selectedDate) => {
+const getTradesFromDB = async (selectedDate, userId) => {
   console.log(
     "Request received in model to fetch trades for date:",
     selectedDate
@@ -10,11 +10,12 @@ const getTradesFromDB = async (selectedDate) => {
 
     const trades = await db("trades")
       .select("*")
-      .where("trade_date", "=", formattedDate)
-      .orderBy("exectime"); // Sorting by execution time
+      .where({ trade_date: formattedDate, user_id: userId })
+      .orderBy("exectime");
 
     console.log("Formatted Date in Model:", formattedDate);
     console.log("Trades fetched and sorted by execution time:", trades);
+    console.log("getTradesFromDB model закончил работу");
     return trades;
   } catch (error) {
     console.error("Error fetching trades from the database:", error);

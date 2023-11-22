@@ -4,11 +4,10 @@ const {
 } = require("../models/downloadTradesFromXLSX.model");
 
 const insertTradeData = async (req, res) => {
-  console.log("Received file:", req.file);
-  console.log("Request body:", req.body);
+  const userId = req.body.userId || req.query.userId || req.params.userId;
   try {
     const filePath = req.file.path;
-    const insertedRows = await insertDataFromExcel(filePath);
+    const insertedRows = await insertDataFromExcel(filePath, userId);
     res
       .status(200)
       .json({ message: "Data successfully inserted", data: insertedRows });
@@ -25,9 +24,7 @@ const getAllTradesData = async (req, res) => {
   try {
     console.log("getAllTradesData в контроллере начал работу");
     const trades = await getTradesData(date);
-    res
-      .status(200)
-      .json({ message: "Data fetched successfully", data: trades });
+    res.status(200).json({ message: "Data fetched successfully" });
   } catch (error) {
     console.error("Error querying database:", error);
     res

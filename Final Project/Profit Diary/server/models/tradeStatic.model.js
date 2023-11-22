@@ -1,15 +1,18 @@
 const { db } = require("../config/db.js");
 
-async function calculateProfit() {
+async function calculateProfit(userId) {
+  console.log("calculateProfit, userID", userId);
   const trades = await db
     .select("*")
     .from("tradestransaction")
+    .where("user_id", userId)
     .orderBy(["exectime"]);
 
   console.log(
     "calculateProfit: Trades fetched from tradestransaction:",
     trades
   );
+  console.log("calculateProfit, userID", userId);
 
   let results = {};
   let positions = {};
@@ -73,13 +76,15 @@ async function calculateProfit() {
   return results;
 }
 
-async function loadTradesIntoDatabase() {
-  const calculatedTrades = await calculateProfit();
+async function loadTradesIntoDatabase(userId) {
+  const calculatedTrades = await calculateProfit(userId);
+  console.log("loadTradesIntoDatabase начал работу userId:", userId);
   console.log("Loading trades into database: ", calculatedTrades);
 
   for (const symbol in calculatedTrades) {
     for (const trade of calculatedTrades[symbol]) {
       await db("trades").insert({
+        user_id: userId,
         trade_date: trade.tradeDate,
         exectime: trade.execTime,
         stock_ticker: symbol,
@@ -88,6 +93,7 @@ async function loadTradesIntoDatabase() {
       });
     }
   }
+  console.log("loadTradesIntoDatabase закончил работу");
   console.log("All trades have been successfully loaded into the database.");
 }
 

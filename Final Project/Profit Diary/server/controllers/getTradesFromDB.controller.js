@@ -5,12 +5,9 @@ const getTradesController = async (req, res) => {
   try {
     const isoDateTime = req.query.datetrade;
     const selectedDate = new Date(isoDateTime).toISOString().split("T")[0];
-    console.log("Selected Date:", selectedDate); // Log the date for debugging
-    console.log("Selected Date in Controller:", selectedDate);
+    const userId = req.body.userId || req.query.userId || req.params.userId;
+    let trades = await getTradesFromDB(selectedDate, userId);
 
-    let trades = await getTradesFromDB(selectedDate);
-
-    // Transform the database fields to camelCase
     trades = trades.map((trade) => ({
       symbol: trade.stock_ticker,
       profit: trade.profit_loss,

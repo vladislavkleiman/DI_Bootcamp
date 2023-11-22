@@ -1,4 +1,4 @@
-const { calculateProfit } = require("../models/tradeStatic.model"); // Adjust the path as needed
+const { calculateProfit } = require("../models/tradeStatic.model");
 
 async function getProfit(req, res) {
   try {

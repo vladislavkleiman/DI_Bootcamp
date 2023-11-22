@@ -84,8 +84,8 @@ const CalendarStatisticComponent = () => {
   const fileInputRef = useRef(null);
 
   const calendarStyle = {
-    width: "1400px", // Adjust the width as needed
-    height: "700px", // Adjust the height as needed
+    width: "1400px",
+    height: "700px",
     margin: "auto",
   };
 
@@ -110,6 +110,14 @@ const CalendarStatisticComponent = () => {
 
     const formData = new FormData();
     formData.append("file", selectedFile);
+
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      formData.append("userId", userId);
+    } else {
+      alert("User ID not found. Please log in again.");
+      return;
+    }
 
     try {
       const response = await fetch(
