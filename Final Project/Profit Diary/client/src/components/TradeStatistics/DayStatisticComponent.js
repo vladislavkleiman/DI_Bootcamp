@@ -5,32 +5,18 @@ import { useLocation } from "react-router-dom";
 
 const DayStatisticComponent = () => {
   const [dataTrades, setDataTrades] = useState([]);
-  const [totalProfit, setTotalProfit] = useState(0); // State to store total profit
+  const [totalProfit, setTotalProfit] = useState(0);
   const [error, setError] = useState(null);
-  const [tradesProcessed, setTradesProcessed] = useState(false);
   const location = useLocation();
   const selectedDate = location.state?.date || "default-date-value";
 
-  useEffect(() => {
-    const processAndFetchTrades = async () => {
-      if (!tradesProcessed) {
-        await sendTradesToServer();
-        setTradesProcessed(true);
-      } else {
-        fetchData();
-      }
-    };
-
-    processAndFetchTrades();
-  }, [selectedDate, tradesProcessed]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [selectedDate]);
 
   useEffect(() => {
-    const total = dataTrades.reduce(
-      (acc, trade) => acc + parseFloat(trade.profit || 0),
-      0
-    );
-    setTotalProfit(total);
-  }, [dataTrades]);
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     const userId = localStorage.getItem("userId");
@@ -51,40 +37,10 @@ const DayStatisticComponent = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log("received data from fetchData in component:", data);
       setDataTrades(data);
     } catch (error) {
       console.error("Error:", error);
       setError(error.message);
-    }
-  };
-
-  const sendTradesToServer = async () => {
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-      console.error("User ID not found.");
-      return;
-    }
-    try {
-      console.log("Starting to process trades...");
-      console.log("sendTradesToServer user_id:", userId);
-      const response = await fetch(
-        `http://localhost:5000/profitdiary/trades-api/loadTrades`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          `Error in processing trades. HTTP status: ${response.status}`
-        );
-      }
-      console.log("Trades processed successfully.");
-    } catch (error) {
-      console.error("Error in trade processing flow:", error);
     }
   };
 

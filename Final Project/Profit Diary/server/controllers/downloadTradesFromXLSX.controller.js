@@ -3,11 +3,18 @@ const {
   getTradesData,
 } = require("../models/downloadTradesFromXLSX.model");
 
+const {
+  loadTradesIntoDatabase,
+  removeDuplicateTrades,
+} = require("../models/tradeStatic.model.js");
+
 const insertTradeData = async (req, res) => {
   const userId = req.body.userId || req.query.userId || req.params.userId;
   try {
     const filePath = req.file.path;
     const insertedRows = await insertDataFromExcel(filePath, userId);
+    await loadTradesIntoDatabase(userId);
+    await removeDuplicateTrades();
     res
       .status(200)
       .json({ message: "Data successfully inserted", data: insertedRows });

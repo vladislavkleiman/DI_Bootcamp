@@ -1,6 +1,7 @@
 const { getTradesFromDB } = require("../models/getTradesFromDB.model.js");
 
 const getTradesController = async (req, res) => {
+  console.log("запрос получен в getTradesController");
   console.log("Request received in getTradesController");
   try {
     const isoDateTime = req.query.datetrade;
@@ -15,7 +16,7 @@ const getTradesController = async (req, res) => {
       tradeDate: trade.trade_date.toISOString(),
       execTime: trade.exectime,
     }));
-
+    console.log("запрос закончил работы в getTradesController");
     res.json(trades);
   } catch (error) {
     console.error("Error fetching trades:", error);

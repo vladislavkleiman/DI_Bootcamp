@@ -1,6 +1,7 @@
 const { db } = require("../config/db.js");
 
 const getTradesFromDB = async (selectedDate, userId) => {
+  console.log("запрос получен в getTradesFromDBnodel");
   console.log(
     "Request received in model to fetch trades for date:",
     selectedDate
