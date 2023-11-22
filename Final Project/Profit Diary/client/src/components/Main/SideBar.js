@@ -20,6 +20,7 @@ import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 250;
 
@@ -44,6 +45,12 @@ function SideBar(props) {
 
   const handleNavigation = (path) => {
     navigate(path);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    document.cookie = "token=; max-age=0";
+    navigate("/");
   };
 
   const drawer = (
@@ -81,7 +88,6 @@ function SideBar(props) {
           </ListItemButton>
         </ListItem>
 
-        {/* Trade Statistics Menu Item */}
         <ListItem disablePadding>
           <ListItemButton onClick={handleTradeStatsClick}>
             <ListItemIcon>
@@ -95,7 +101,6 @@ function SideBar(props) {
           </ListItemButton>
         </ListItem>
 
-        {/* Submenu for Trade Statistics */}
         <Collapse in={openTradeStats} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItemButton
@@ -118,6 +123,15 @@ function SideBar(props) {
             </ListItemButton>
           </List>
         </Collapse>
+
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleLogout}>
+            <ListItemIcon style={{ color: "black" }}>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" style={{ color: "black" }} />
+          </ListItemButton>
+        </ListItem>
       </List>
 
       <div

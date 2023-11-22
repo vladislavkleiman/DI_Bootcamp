@@ -11,6 +11,7 @@ CREATE TABLE users (
 
 CREATE TABLE tradestransaction (
     id_trades SERIAL PRIMARY KEY,
+    user_id INTEGER,
     DateTrades DATE,
     Currency TEXT,
     Side TEXT,
@@ -22,16 +23,11 @@ CREATE TABLE tradestransaction (
     NetProceeds NUMERIC
 );
 
-CREATE TABLE trades (
-    id_trades SERIAL PRIMARY KEY,
-    trade_date DATE,
-    stock_ticker TEXT,
-    trade_type TEXT,
-    profit_loss VARCHAR
-);
+
 
 CREATE TABLE trades (
     id_trades SERIAL PRIMARY KEY,
+    user_id INTEGER,
     trade_date DATE,
     exectime TIME,
     stock_ticker TEXT,

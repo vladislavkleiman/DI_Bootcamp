@@ -1,7 +1,6 @@
 const { db } = require("../config/db.js");
 
 async function calculateProfit() {
-  // Fetch all trades from the database, sorted by symbol and DateTrades
   const trades = await db
     .select("*")
     .from("tradestransaction")
@@ -16,29 +15,26 @@ async function calculateProfit() {
   let positions = {};
 
   trades.forEach((trade) => {
-    const { symbol, qty, price, side, datetrades, exectime } = trade; // Ensure these match your column names
+    const { symbol, qty, price, side, datetrades, exectime } = trade;
 
-    // Initialize the stock position if it doesn't exist
     if (!positions[symbol]) {
       positions[symbol] = {
         qty: 0,
         buyCost: 0,
         sellRevenue: 0,
         firstTradeType: null,
-        firstTradeDate: null, // Add a field to store the date of the first trade
+        firstTradeDate: null,
       };
     }
 
-    // Determine the type and date of the first trade (Long or Short)
     if (
       positions[symbol].qty === 0 &&
       positions[symbol].firstTradeType === null
     ) {
       positions[symbol].firstTradeType = side === "B" ? "Long" : "Short";
-      positions[symbol].firstTradeDate = datetrades; // Store the date of the first trade
+      positions[symbol].firstTradeDate = datetrades;
     }
 
-    // Update position
     if (side === "B") {
       positions[symbol].qty += qty;
       positions[symbol].buyCost += qty * price;
@@ -47,7 +43,6 @@ async function calculateProfit() {
       positions[symbol].sellRevenue += qty * price;
     }
 
-    // Check if position is closed and there was a trade
     if (
       positions[symbol].qty === 0 &&
       (positions[symbol].buyCost > 0 || positions[symbol].sellRevenue > 0)
@@ -62,10 +57,9 @@ async function calculateProfit() {
         profit: profit.toFixed(2),
         tradeType: positions[symbol].firstTradeType,
         tradeDate: positions[symbol].firstTradeDate,
-        execTime: exectime, // Add the trade date to the result
+        execTime: exectime,
       });
 
-      // Reset position for the next trade sequence
       positions[symbol] = {
         qty: 0,
         buyCost: 0,
@@ -99,7 +93,6 @@ async function loadTradesIntoDatabase() {
 
 async function removeDuplicateTrades() {
   try {
-    // Use a CTE to find duplicates and keep only the first instance of each duplicate set
     await db.raw(`
       WITH duplicates AS (
         SELECT id_trades,

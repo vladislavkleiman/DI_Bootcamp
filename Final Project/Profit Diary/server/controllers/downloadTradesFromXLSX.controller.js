@@ -4,7 +4,7 @@ const {
 } = require("../models/downloadTradesFromXLSX.model");
 
 const insertTradeData = async (req, res) => {
-  console.log("Received file:", req.file); // Log the received file details
+  console.log("Received file:", req.file);
   console.log("Request body:", req.body);
   try {
     const filePath = req.file.path;
@@ -21,10 +21,10 @@ const insertTradeData = async (req, res) => {
 };
 
 const getAllTradesData = async (req, res) => {
-  const { date } = req.query; // Get the date from query parameters
+  const { date } = req.query;
   try {
     console.log("getAllTradesData в контроллере начал работу");
-    const trades = await getTradesData(date); // Pass the date to the model function
+    const trades = await getTradesData(date);
     res
       .status(200)
       .json({ message: "Data fetched successfully", data: trades });
@@ -38,5 +38,5 @@ const getAllTradesData = async (req, res) => {
 
 module.exports = {
   insertTradeData,
-  getAllTradesData, // Export the function
+  getAllTradesData,
 };
