@@ -3,18 +3,15 @@ import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
 const ProfitChartComponent = ({ trades }) => {
-  // Initialize the data array with zero as the starting point
   let cumulativeProfit = [0];
 
-  // Calculate the cumulative profit
   trades.forEach((trade) => {
-    // Add the current trade's profit to the last value in the cumulativeProfit array
     let lastProfit = cumulativeProfit[cumulativeProfit.length - 1];
     cumulativeProfit.push(lastProfit + parseFloat(trade.profit));
   });
 
   const chartData = {
-    labels: new Array(cumulativeProfit.length).fill(""), // Adjust the labels as needed
+    labels: new Array(cumulativeProfit.length).fill(""),
     datasets: [
       {
         label: "Cumulative Profit",

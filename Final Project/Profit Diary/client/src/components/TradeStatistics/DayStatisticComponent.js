@@ -76,13 +76,25 @@ const DayStatisticComponent = () => {
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
         alignItems: "center",
+        justifyContent: "center",
+        marginTop: "20px",
       }}
     >
-      <ProfitChartComponent trades={flattenTrades(dataTrades)} />
-      <TradeStatisticsTable tradeStatistics={tradeStatistics} />
-      <TradeTable trades={flattenTrades(dataTrades)} />
+      <div style={{ marginBottom: "-220px" }}>
+        <ProfitChartComponent trades={flattenTrades(dataTrades)} />
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          width: "100%",
+          marginTop: "10px",
+        }}
+      >
+        <TradeStatisticsTable tradeStatistics={tradeStatistics} />
+        <TradeTable trades={flattenTrades(dataTrades)} />
+      </div>
     </div>
   );
 };

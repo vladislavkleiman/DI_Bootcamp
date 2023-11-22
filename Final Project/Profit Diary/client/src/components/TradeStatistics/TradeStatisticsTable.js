@@ -9,42 +9,54 @@ const TradeStatisticsTable = ({ tradeStatistics }) => {
     return isNaN(number) ? 0 : Number(number.toFixed(2));
   };
 
+  const tableCellStyle = {
+    borderRadius: "10px",
+    border: "1px solid #ccc",
+    padding: "5px",
+  };
+
   return (
-    <div style={{ marginTop: "20px" }}>
+    <div style={{ marginTop: "50px" }}>
       <h3>Trade Statistics</h3>
       <table>
         <tbody>
           <tr>
-            <td>Profit/Loss:</td>
-            <td>{tradeStatistics.profitloss}</td>
+            <td style={tableCellStyle}>Profit/Loss:</td>
+            <td style={tableCellStyle}>{tradeStatistics.profitloss}</td>
           </tr>
           <tr>
-            <td>Total Winners:</td>
-            <td>{tradeStatistics.total_winners}</td>
+            <td style={tableCellStyle}>Total Winners:</td>
+            <td style={tableCellStyle}>{tradeStatistics.total_winners}</td>
           </tr>
           <tr>
-            <td>Total Losers:</td>
-            <td>{tradeStatistics.total_losers}</td>
+            <td style={tableCellStyle}>Total Losers:</td>
+            <td style={tableCellStyle}>{tradeStatistics.total_losers}</td>
           </tr>
           <tr>
-            <td>Total Trades:</td>
-            <td>{tradeStatistics.total_trades}</td>
+            <td style={tableCellStyle}>Total Trades:</td>
+            <td style={tableCellStyle}>{tradeStatistics.total_trades}</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td style={tableCellStyle}>Average Return:</td>
+            <td style={tableCellStyle}>
+              {roundToTwoDecimals(tradeStatistics.avg_return)}
+            </td>
           </tr>
           <tr>
-            <td>Average Return:</td>
-            <td>{roundToTwoDecimals(tradeStatistics.avg_return)}</td>
+            <td style={tableCellStyle}>Total Long:</td>
+            <td style={tableCellStyle}>{tradeStatistics.total_long}</td>
           </tr>
           <tr>
-            <td>Total Long:</td>
-            <td>{tradeStatistics.total_long}</td>
+            <td style={tableCellStyle}>Total Shorts:</td>
+            <td style={tableCellStyle}>{tradeStatistics.total_shorts}</td>
           </tr>
           <tr>
-            <td>Total Shorts:</td>
-            <td>{tradeStatistics.total_shorts}</td>
-          </tr>
-          <tr>
-            <td>Win Rate:</td>
-            <td>{roundToTwoDecimals(tradeStatistics.win_rate)}</td>
+            <td style={tableCellStyle}>Win Rate:</td>
+            <td style={tableCellStyle}>
+              {roundToTwoDecimals(tradeStatistics.win_rate)}
+            </td>
           </tr>
         </tbody>
       </table>
