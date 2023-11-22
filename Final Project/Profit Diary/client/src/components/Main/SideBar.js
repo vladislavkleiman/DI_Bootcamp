@@ -57,7 +57,7 @@ function SideBar(props) {
     <div>
       <List>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => handleNavigation("/")}>
+          <ListItemButton onClick={() => handleNavigation("/home")}>
             <ListItemIcon style={{ color: "black" }}>
               <HomeIcon />
             </ListItemIcon>
