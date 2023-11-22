@@ -1,22 +1,25 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import LoginComponent from "./components/Login/LoginComponent";
 import HomeComponent from "./components/Main/HomeComponent";
 import CalendarStatisticComponent from "./components/TradeStatistics/CalendarStatisticComponent";
-import SideBar from "./components/Main/SideBar";
 import InfoAboutStockComponent from "./components/InfoAboutCompany/InfoAboutStockComponent";
 import GeneralStatisticComponent from "./components/TradeStatistics/GeneralStatisticComponent";
 import NoteDiaryComponent from "./components/Diary/NoteDiaryComponent";
 import DayStatisticComponent from "./components/TradeStatistics/DayStatisticComponent";
+import SideBar from "./components/Main/SideBar";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <SideBar />
+const App = () => {
+  const location = useLocation();
+  const showSidebar = location.pathname !== "/";
+
+  return (
+    <>
+      {showSidebar && <SideBar />}
       <Routes>
-        <Route path="/" element={<HomeComponent />} />
+        <Route path="/" element={<LoginComponent />} />
+        <Route path="/home" element={<HomeComponent />} />
         <Route path="/diary" element={<NoteDiaryComponent />} />
         <Route path="/calendar" element={<CalendarStatisticComponent />} />
         <Route
@@ -29,6 +32,15 @@ root.render(
         />
         <Route path="/daystatistic" element={<DayStatisticComponent />} />
       </Routes>
+    </>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

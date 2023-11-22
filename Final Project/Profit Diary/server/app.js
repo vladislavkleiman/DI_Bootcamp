@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const { authRouter } = require("./routers/auth.route.js");
 const {
@@ -8,8 +9,12 @@ const {
 const { tradesRouter } = require("./routers/trades.route.js");
 const { tradeStaticRoute } = require("./routers/tradeStatic.route.js");
 const { getTradesRouter } = require("./routers/getTradesFromDB.route.js");
+const {
+  authenticateTokenRoute,
+} = require("./routers/authenticateToken.route.js");
 
 const app = express();
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   console.log("Incoming request:", req.path);
@@ -26,6 +31,7 @@ app.use("/profitdiary/trades-api", tradesRouter);
 app.use("/profitdiary/trade-summary", tradeStaticRoute);
 
 app.use("/profitdiary/auth", authRouter);
+app.use("/profitdiary", authenticateTokenRoute);
 
 app.use((error, req, res, next) => {
   console.error("Unhandled error:", error);

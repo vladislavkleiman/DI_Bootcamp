@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const { getUser, addUser } = require("../models/auth.model.js");
+const jwt = require("jsonwebtoken");
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
 //register
 const register = async (req, res) => {
@@ -32,20 +34,37 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { username, password } = req.body;
 
-  const responds = await getUser(username);
-  if (responds.length == 0)
-    return res.status(404).json({ error: "User not found" });
-  const user = responds[0];
+  try {
+    const responds = await getUser(username);
+    if (responds.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-  bcrypt.compare(password, user.password, (err, result) => {
-    if (err) return res.status(500).json({ error: "Something went wrong" });
+    const user = responds[0];
 
+    const result = await bcrypt.compare(password, user.password);
     if (result) {
-      res.send({ message: `Hi ${username}, welcome back again!`, id: user.id });
+      const token = jwt.sign(
+        { id: user.id, username: user.username },
+        jwtSecretKey,
+        { expiresIn: "7d" }
+      );
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.send({
+        message: `Hi ${username}, welcome back again!`,
+        token: token,
+        userId: user.id,
+      });
     } else {
       res.status(404).json({ error: "Invalid credentials" });
     }
-  });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
-
 module.exports = { register, login };
