@@ -10,7 +10,7 @@ const {
 
 const {
   calculateAndInsertTradeStatistics,
-} = require("../models/staticforday.model.js");
+} = require("../models/insertStaticForDay.model.js");
 
 const insertTradeData = async (req, res) => {
   const userId = req.body.userId || req.query.userId || req.params.userId;

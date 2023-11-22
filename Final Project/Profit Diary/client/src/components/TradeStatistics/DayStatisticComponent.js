@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import TradeTable from "./TradesTableComponent";
 import ProfitChartComponent from "./ProfitChartComponent";
+import TradeStatisticsTable from "./TradeStatisticsTable"; // Import the new component
 import { useLocation } from "react-router-dom";
 
 const DayStatisticComponent = () => {
   const [dataTrades, setDataTrades] = useState([]);
+  const [tradeStatistics, setTradeStatistics] = useState({});
   const [error, setError] = useState(null);
   const location = useLocation();
   const selectedDate = location.state?.date || "default-date-value";
@@ -32,7 +34,8 @@ const DayStatisticComponent = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setDataTrades(data);
+      setDataTrades(data.trades);
+      setTradeStatistics(data.tradeStatistics);
     } catch (error) {
       console.error("Error:", error);
       setError(error.message);
@@ -78,6 +81,7 @@ const DayStatisticComponent = () => {
       }}
     >
       <ProfitChartComponent trades={flattenTrades(dataTrades)} />
+      <TradeStatisticsTable tradeStatistics={tradeStatistics} />
       <TradeTable trades={flattenTrades(dataTrades)} />
     </div>
   );
