@@ -46,10 +46,11 @@ const insertDataFromExcel = async (filePath, userId) => {
   }));
 
   try {
-    const insertedRows = await db("tradestransaction")
-      .insert(formattedData)
-      .returning("*");
-    return insertedRows;
+    await db("tradestransaction").insert(formattedData);
+    const uniqueDates = [
+      ...new Set(formattedData.map((item) => item.datetrades)),
+    ];
+    return uniqueDates;
   } catch (error) {
     console.error("Error inserting data into database:", error);
     throw error;

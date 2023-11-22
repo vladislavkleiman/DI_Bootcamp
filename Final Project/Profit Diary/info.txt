@@ -23,6 +23,20 @@ CREATE TABLE tradestransaction (
     NetProceeds NUMERIC
 );
 
+CREATE TABLE statisticoftradesforday (
+    id SERIAL PRIMARY KEY,
+    date_trade DATE,
+    user_id VARCHAR,
+    profitloss NUMERIC,
+    total_winners INTEGER,
+    total_losers INTEGER,
+    total_trades INTEGER,
+    avg_return NUMERIC,
+    total_long INTEGER,
+    total_shorts INTEGER,
+    win_rate NUMERIC
+);
+
 
 
 
@@ -42,4 +56,6 @@ CREATE TABLE trades (
 users for test:
 vlad123 vlad123
 vlad888 vlad888
+
+
 

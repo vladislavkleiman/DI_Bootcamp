@@ -5,14 +5,9 @@ import { useLocation } from "react-router-dom";
 
 const DayStatisticComponent = () => {
   const [dataTrades, setDataTrades] = useState([]);
-  const [totalProfit, setTotalProfit] = useState(0);
   const [error, setError] = useState(null);
   const location = useLocation();
   const selectedDate = location.state?.date || "default-date-value";
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, [selectedDate]);
 
   useEffect(() => {
     fetchData();
@@ -83,9 +78,6 @@ const DayStatisticComponent = () => {
       }}
     >
       <ProfitChartComponent trades={flattenTrades(dataTrades)} />
-      <div style={{ fontSize: "20px" }}>
-        Profit for day: ${totalProfit.toFixed(2)}
-      </div>
       <TradeTable trades={flattenTrades(dataTrades)} />
     </div>
   );
