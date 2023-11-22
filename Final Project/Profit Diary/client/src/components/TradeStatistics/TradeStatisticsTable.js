@@ -1,6 +1,14 @@
 import React from "react";
 
 const TradeStatisticsTable = ({ tradeStatistics }) => {
+  const roundToTwoDecimals = (value) => {
+    if (value === null || value === undefined) {
+      return 0;
+    }
+    const number = parseFloat(value);
+    return isNaN(number) ? 0 : Number(number.toFixed(2));
+  };
+
   return (
     <div style={{ marginTop: "20px" }}>
       <h3>Trade Statistics</h3>
@@ -24,7 +32,7 @@ const TradeStatisticsTable = ({ tradeStatistics }) => {
           </tr>
           <tr>
             <td>Average Return:</td>
-            <td>{tradeStatistics.avg_return}</td>
+            <td>{roundToTwoDecimals(tradeStatistics.avg_return)}</td>
           </tr>
           <tr>
             <td>Total Long:</td>
@@ -36,7 +44,7 @@ const TradeStatisticsTable = ({ tradeStatistics }) => {
           </tr>
           <tr>
             <td>Win Rate:</td>
-            <td>{tradeStatistics.win_rate}</td>
+            <td>{roundToTwoDecimals(tradeStatistics.win_rate)}</td>
           </tr>
         </tbody>
       </table>
