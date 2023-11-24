@@ -59,11 +59,12 @@ const CalendarStatisticComponent = () => {
 
       const statsMap = {};
       data.forEach((stat) => {
-        const day = new Date(stat.date_trade).getDate();
-        statsMap[day] = stat;
+        const localDate = new Date(stat.date_trade).toLocaleDateString("en-CA");
+        statsMap[localDate] = stat;
       });
-      // setTradeStats(statsMap);
-      setTradeStats(data);
+      console.log("Constructed Stats Map:", statsMap);
+      setTradeStats(statsMap);
+      // setTradeStats(data);
       console.log(data);
       console.log(
         "fetchTradeStats для полученимя данных за месяц закончил работу"
@@ -74,7 +75,13 @@ const CalendarStatisticComponent = () => {
   };
 
   const getListData = (value) => {
-    const dayStats = tradeStats[value.date()];
+    const formattedDate = value.format("YYYY-MM-DD");
+    console.log("Looking up stats for date:", formattedDate);
+    console.log("Current tradeStats State:", tradeStats);
+
+    const dayStats = tradeStats[formattedDate];
+    console.log("Stats for", formattedDate, ":", dayStats);
+
     if (!dayStats) return [];
 
     return [
@@ -174,8 +181,8 @@ const CalendarStatisticComponent = () => {
 
   const onPanelChange = (value) => {
     const year = value.year();
-    const month = value.month() + 1; // month() returns 0-11, so adding 1
-    console.log("Selected Year:", year, "Selected Month:", month); // Log the selected year and month
+    const month = value.month() + 1;
+    console.log("Selected Year:", year, "Selected Month:", month);
     fetchTradeStats(year, month);
   };
 

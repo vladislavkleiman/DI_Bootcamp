@@ -14,7 +14,7 @@ const getMonthlyTradeStats = async (year, month, userId) => {
     console.log("getMonthlyTradeStats model год и месяц,", year, month);
 
     const tradeStats = await db("statisticoftradesforday")
-      .select("total_trades", "profitloss")
+      .select("total_trades", "profitloss", "date_trade")
       .where("user_id", userId)
       .andWhere("date_trade", ">=", startDate)
       .andWhere("date_trade", "<=", endDate)
