@@ -84,10 +84,13 @@ const CalendarStatisticComponent = () => {
 
     if (!dayStats) return [];
 
+    const profitLossFormatted = `$${Number(dayStats.profitloss).toFixed(2)}`;
+    const tradesText = `Trades: ${dayStats.total_trades}`;
+
     return [
       {
         type: dayStats.profitloss >= 0 ? "success" : "error",
-        content: `Profit/Loss: ${dayStats.profitloss}, Trades: ${dayStats.total_trades}`,
+        content: `${profitLossFormatted} ${tradesText}`,
       },
     ];
   };
@@ -203,7 +206,7 @@ const CalendarStatisticComponent = () => {
         <ul className="events">
           {listData.map((item, index) => (
             <li key={index}>
-              <Badge status={item.type} text={item.content} />
+              <span>{item.content}</span>
             </li>
           ))}
         </ul>
