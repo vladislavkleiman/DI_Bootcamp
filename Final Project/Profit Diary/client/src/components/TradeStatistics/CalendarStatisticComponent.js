@@ -3,6 +3,7 @@ import { Badge, Calendar, Drawer } from "antd";
 import AddIcon from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import "../../styles/CellCalendarStyle.css";
 
 const getMonthData = (value) => {
   if (value.month() === 8) {
@@ -16,6 +17,7 @@ const CalendarStatisticComponent = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
   const [tradeStats, setTradeStats] = useState({});
+  const [cellColors, setCellColors] = useState({});
 
   const calendarStyle = {
     width: "1400px",
@@ -54,21 +56,27 @@ const CalendarStatisticComponent = () => {
       if (!response.ok) {
         throw new Error("Failed to fetch trade statistics");
       }
+      const newCellColors = {};
       const data = await response.json();
       console.log("Response data:", data);
+
+      // Clear existing classes
+      document.querySelectorAll(".profit-cell, .loss-cell").forEach((cell) => {
+        cell.classList.remove("profit-cell", "loss-cell");
+      });
 
       const statsMap = {};
       data.forEach((stat) => {
         const localDate = new Date(stat.date_trade).toLocaleDateString("en-CA");
         statsMap[localDate] = stat;
+        const cell = document.querySelector(`td[title="${localDate}"]`);
+        if (cell) {
+          const isProfit = Number(stat.profitloss) >= 0;
+          cell.classList.add(isProfit ? "profit-cell" : "loss-cell");
+        }
       });
       console.log("Constructed Stats Map:", statsMap);
       setTradeStats(statsMap);
-      // setTradeStats(data);
-      console.log(data);
-      console.log(
-        "fetchTradeStats для полученимя данных за месяц закончил работу"
-      );
     } catch (error) {
       console.error("Error fetching trade statistics:", error);
     }
@@ -83,14 +91,15 @@ const CalendarStatisticComponent = () => {
     console.log("Stats for", formattedDate, ":", dayStats);
 
     if (!dayStats) return [];
-
-    const profitLossFormatted = `$${Number(dayStats.profitloss).toFixed(2)}`;
-    const tradesText = `Trades: ${dayStats.total_trades}`;
+    const profitLossValue = Number(dayStats.profitloss);
+    const cellClass = profitLossValue >= 0 ? "profit-cell" : "loss-cell";
 
     return [
       {
         type: dayStats.profitloss >= 0 ? "success" : "error",
-        content: `${profitLossFormatted} ${tradesText}`,
+        profitLossFormatted: `$${Number(dayStats.profitloss).toFixed(2)}`,
+        tradesText: `Trades: ${dayStats.total_trades}`,
+        cellClass,
       },
     ];
   };
@@ -154,6 +163,13 @@ const CalendarStatisticComponent = () => {
       handleFileUpload();
     }
   }, [selectedFile]);
+  useEffect(() => {
+    const today = new Date();
+    setTimeout(
+      () => fetchTradeStats(today.getFullYear(), today.getMonth() + 1),
+      0
+    );
+  }, []);
 
   useEffect(() => {
     console.log("Updated tradeStats:", tradeStats);
@@ -205,8 +221,34 @@ const CalendarStatisticComponent = () => {
       return (
         <ul className="events">
           {listData.map((item, index) => (
-            <li key={index}>
-              <span>{item.content}</span>
+            <li
+              key={index}
+              style={{ position: "relative" }}
+              className={item.cellClass}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  top: -25,
+                  left: 0,
+                  fontSize: "smaller",
+                }}
+              >
+                {item.tradesText}
+              </span>
+              <span
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  fontWeight: "bold",
+                  fontSize: "larger",
+                  marginTop: "20px",
+                }}
+              >
+                {item.profitLossFormatted}
+              </span>
             </li>
           ))}
         </ul>
