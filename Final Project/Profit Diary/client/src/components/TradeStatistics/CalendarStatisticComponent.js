@@ -222,7 +222,7 @@ const CalendarStatisticComponent = () => {
           {listData.map((item, index) => (
             <li
               key={index}
-              style={{ position: "relative" }}
+              style={{ position: "relative", listStyle: "none" }} // Remove dots
               className={item.cellClass}
             >
               <span
@@ -240,7 +240,6 @@ const CalendarStatisticComponent = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  height: "100%",
                   fontWeight: "bold",
                   fontSize: "larger",
                   marginTop: "20px",
