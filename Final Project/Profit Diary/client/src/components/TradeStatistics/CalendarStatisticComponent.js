@@ -17,7 +17,6 @@ const CalendarStatisticComponent = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
   const [tradeStats, setTradeStats] = useState({});
-  const [cellColors, setCellColors] = useState({});
 
   const calendarStyle = {
     width: "1400px",

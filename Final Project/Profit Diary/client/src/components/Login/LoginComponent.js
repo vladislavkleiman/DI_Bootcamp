@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/Login.css";
+import { TextField, Button, Container, Typography } from "@mui/material";
+// import "../../styles/Login.css";
 
 const LoginComponent = () => {
   const [username, setUsername] = useState("");
@@ -47,33 +48,54 @@ const LoginComponent = () => {
   };
 
   return (
-    <div className="mainLogin">
+    <Container maxWidth="xs" className="mainLogin">
       <form className="formLogin" name="formLogin" onSubmit={handleLogin}>
-        <label className="username" htmlFor="username">
-          Username:
-        </label>
-        <input
-          type="text"
-          className="inputUsername"
-          name="username"
-          onChange={handleInputChange}
-        />
-        <label className="password" htmlFor="password">
-          Password:
-        </label>
-        <input
-          type="password"
-          className="inputPassword"
-          name="password"
-          onChange={handleInputChange}
-        />
-        <button type="submit" className="login">
+        <Typography variant="h5" align="center">
           Login
-        </button>
-
-        <button className="register">Register</button>
+        </Typography>
+        <TextField
+          fullWidth
+          label="Username"
+          name="username"
+          variant="outlined"
+          margin="normal"
+          onChange={handleInputChange}
+        />
+        <TextField
+          fullWidth
+          label="Password"
+          name="password"
+          type="password"
+          variant="outlined"
+          margin="normal"
+          onChange={handleInputChange}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          size="large"
+          sx={{ mt: 2 }}
+          style={{ backgroundColor: "black", color: "white" }}
+        >
+          Login
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          fullWidth
+          size="large"
+          sx={{ mt: 1 }}
+          onClick={() => {
+            console.log("Registration button clicked");
+          }}
+          style={{ backgroundColor: "black", color: "white" }}
+        >
+          Register
+        </Button>
       </form>
-    </div>
+    </Container>
   );
 };
 
