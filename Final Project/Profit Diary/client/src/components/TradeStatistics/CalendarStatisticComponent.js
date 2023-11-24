@@ -4,73 +4,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const getListData = (value) => {
-  let listData;
-
-  switch (value.date()) {
-    case 8:
-      listData = [
-        {
-          type: "warning",
-          content: "This is warning event.",
-        },
-        {
-          type: "success",
-          content: "This is usual event.",
-        },
-      ];
-      break;
-
-    case 10:
-      listData = [
-        {
-          type: "warning",
-          content: "This is warning event.",
-        },
-        {
-          type: "success",
-          content: "This is usual event.",
-        },
-        {
-          type: "error",
-          content: "This is error event.",
-        },
-      ];
-      break;
-
-    case 15:
-      listData = [
-        {
-          type: "warning",
-          content: "This is warning event",
-        },
-        {
-          type: "success",
-          content: "This is very long usual event......",
-        },
-        {
-          type: "error",
-          content: "This is error event 1.",
-        },
-        {
-          type: "error",
-          content: "This is error event 2.",
-        },
-        {
-          type: "error",
-          content: "This is error event 3.",
-        },
-        {
-          type: "error",
-          content: "This is error event 4.",
-        },
-      ];
-      break;
-    default:
-  }
-  return listData || [];
-};
-
 const getMonthData = (value) => {
   if (value.month() === 8) {
     return 1394;
@@ -82,6 +15,7 @@ const CalendarStatisticComponent = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
+  const [tradeStats, setTradeStats] = useState({});
 
   const calendarStyle = {
     width: "1400px",
@@ -100,6 +34,55 @@ const CalendarStatisticComponent = () => {
   const blurStyle = {
     filter: sidebarVisible ? "blur(4px)" : "none",
     transition: "filter 0.3s",
+  };
+
+  const fetchTradeStats = async (year, month) => {
+    const userId = localStorage.getItem("userId");
+    console.log("fetchTradeStats called with year:", year, "month:", month);
+    try {
+      const response = await fetch(
+        `http://localhost:5000/profitdiary/trade-stats`,
+        {
+          method: "GET",
+          headers: {
+            "user-id": userId,
+            year: year.toString(),
+            month: month.toString(),
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch trade statistics");
+      }
+      const data = await response.json();
+      console.log("Response data:", data);
+
+      const statsMap = {};
+      data.forEach((stat) => {
+        const day = new Date(stat.date_trade).getDate();
+        statsMap[day] = stat;
+      });
+      // setTradeStats(statsMap);
+      setTradeStats(data);
+      console.log(data);
+      console.log(
+        "fetchTradeStats для полученимя данных за месяц закончил работу"
+      );
+    } catch (error) {
+      console.error("Error fetching trade statistics:", error);
+    }
+  };
+
+  const getListData = (value) => {
+    const dayStats = tradeStats[value.date()];
+    if (!dayStats) return [];
+
+    return [
+      {
+        type: dayStats.profitloss >= 0 ? "success" : "error",
+        content: `Profit/Loss: ${dayStats.profitloss}, Trades: ${dayStats.total_trades}`,
+      },
+    ];
   };
 
   const handleFileUpload = async () => {
@@ -162,6 +145,10 @@ const CalendarStatisticComponent = () => {
     }
   }, [selectedFile]);
 
+  useEffect(() => {
+    console.log("Updated tradeStats:", tradeStats);
+  }, [tradeStats]);
+
   const navigate = useNavigate();
 
   const viewDay = () => {
@@ -180,6 +167,18 @@ const CalendarStatisticComponent = () => {
     setSidebarVisible(true);
   };
 
+  useEffect(() => {
+    const today = new Date();
+    fetchTradeStats(today.getFullYear(), today.getMonth());
+  }, []);
+
+  const onPanelChange = (value) => {
+    const year = value.year();
+    const month = value.month() + 1; // month() returns 0-11, so adding 1
+    console.log("Selected Year:", year, "Selected Month:", month); // Log the selected year and month
+    fetchTradeStats(year, month);
+  };
+
   const monthCellRender = (value) => {
     const num = getMonthData(value);
     return num ? (
@@ -190,23 +189,23 @@ const CalendarStatisticComponent = () => {
     ) : null;
   };
 
-  const dateCellRender = (value) => {
-    const listData = getListData(value);
-    return (
-      <ul className="events">
-        {listData.map((item) => (
-          <li key={item.content}>
-            <Badge status={item.type} text={item.content} />
-          </li>
-        ))}
-      </ul>
-    );
-  };
-
   const cellRender = (current, info) => {
-    if (info.type === "date") return dateCellRender(current);
-    if (info.type === "month") return monthCellRender(current);
-    return info.originNode;
+    if (info && info.type === "date") {
+      const listData = getListData(current);
+      return (
+        <ul className="events">
+          {listData.map((item, index) => (
+            <li key={index}>
+              <Badge status={item.type} text={item.content} />
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    if (info && info.type === "month") {
+      return monthCellRender(current);
+    }
+    return null;
   };
 
   return (
@@ -216,6 +215,7 @@ const CalendarStatisticComponent = () => {
           style={calendarStyle}
           cellRender={cellRender}
           onSelect={onSelect}
+          onPanelChange={onPanelChange}
         />
       </div>
       <Drawer

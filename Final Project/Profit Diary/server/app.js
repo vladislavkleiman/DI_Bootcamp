@@ -12,6 +12,9 @@ const { getTradesRouter } = require("./routers/getTradesFromDB.route.js");
 const {
   authenticateTokenRoute,
 } = require("./routers/authenticateToken.route.js");
+const {
+  getMonthlyTradeStatsRoute,
+} = require("../server/routers/getMonthlyTradeStatistics.route.js");
 
 const app = express();
 app.use(cookieParser());
@@ -23,11 +26,10 @@ app.use((req, res, next) => {
 app.use(express.static("client"));
 app.use(express.json());
 app.use(cors());
+app.use("/profitdiary/trade-stats", getMonthlyTradeStatsRoute);
 app.use("/profitdiary/daily-trades", getTradesRouter);
 app.use("/profitdiary/trades-upload", downloadTradesFromXLSXRouter);
-
 app.use("/profitdiary/trades-api", tradesRouter);
-
 app.use("/profitdiary/trade-summary", tradeStaticRoute);
 
 app.use("/profitdiary/auth", authRouter);

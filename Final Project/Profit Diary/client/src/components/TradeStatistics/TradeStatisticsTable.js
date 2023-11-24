@@ -21,7 +21,7 @@ const TradeStatisticsTable = ({ tradeStatistics }) => {
       <table>
         <tbody>
           <tr>
-            <td style={tableCellStyle}>Profit/Loss:</td>
+            <td style={tableCellStyle}>Profit/Loss, $:</td>
             <td style={tableCellStyle}>{tradeStatistics.profitloss}</td>
           </tr>
           <tr>
@@ -39,7 +39,7 @@ const TradeStatisticsTable = ({ tradeStatistics }) => {
         </tbody>
         <tbody>
           <tr>
-            <td style={tableCellStyle}>Average Return:</td>
+            <td style={tableCellStyle}>Average Return, $:</td>
             <td style={tableCellStyle}>
               {roundToTwoDecimals(tradeStatistics.avg_return)}
             </td>
@@ -53,7 +53,7 @@ const TradeStatisticsTable = ({ tradeStatistics }) => {
             <td style={tableCellStyle}>{tradeStatistics.total_shorts}</td>
           </tr>
           <tr>
-            <td style={tableCellStyle}>Win Rate:</td>
+            <td style={tableCellStyle}>Win Rate, %:</td>
             <td style={tableCellStyle}>
               {roundToTwoDecimals(tradeStatistics.win_rate)}
             </td>

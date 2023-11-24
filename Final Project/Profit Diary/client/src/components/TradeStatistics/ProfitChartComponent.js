@@ -4,7 +4,6 @@ import "chart.js/auto";
 
 const ProfitChartComponent = ({ trades }) => {
   let cumulativeProfit = [0];
-
   trades.forEach((trade) => {
     let lastProfit = cumulativeProfit[cumulativeProfit.length - 1];
     cumulativeProfit.push(lastProfit + parseFloat(trade.profit));
@@ -16,9 +15,18 @@ const ProfitChartComponent = ({ trades }) => {
       {
         label: "Cumulative Profit",
         data: cumulativeProfit,
-        fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 0.2)",
+        fill: true,
+        borderColor: "rgba(75, 192, 192, 1)",
+        segment: {
+          borderColor: (ctx) => {
+            const value = ctx.p1.parsed.y;
+            return value >= 0 ? "rgba(0, 255, 0, 1)" : "rgba(255, 0, 0, 1)";
+          },
+          backgroundColor: (ctx) => {
+            const value = ctx.p1.parsed.y;
+            return value >= 0 ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)";
+          },
+        },
       },
     ],
   };
