@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -9,6 +9,33 @@ import {
 } from "@mui/material";
 
 const MainStatictic = () => {
+  const [statistics, setStatistics] = useState({});
+  const roundToTwo = (num) => {
+    const number = parseFloat(num);
+    return isNaN(number) ? 0 : number.toFixed(2);
+  };
+
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      const userId = localStorage.getItem("userId");
+      try {
+        const response = await fetch(
+          `http://localhost:5000/profitdiary/user-statistics/user/${userId}/statistics`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setStatistics(data);
+        } else {
+          console.error("Failed to fetch statistics");
+        }
+      } catch (error) {
+        console.error("Error fetching statistics:", error);
+      }
+    };
+
+    fetchStatistics();
+  }, []);
+
   return (
     <TableContainer
       component={Paper}
@@ -18,35 +45,33 @@ const MainStatictic = () => {
         <TableBody>
           <TableRow>
             <TableCell sx={{ width: "500px", border: "1px solid black" }}>
-              Gross Profit
+              Gross Profit, $: {roundToTwo(statistics.grossProfit)}
             </TableCell>
             <TableCell sx={{ width: "500px", border: "1px solid black" }}>
-              Average Daily Return, $
+              Average Daily Return, $:{" "}
+              {roundToTwo(statistics.averageDailyReturn)}
             </TableCell>
             <TableCell sx={{ width: "500px", border: "1px solid black" }}>
-              Avg profit
+              Average profit, $: {roundToTwo(statistics.averageProfit)}
             </TableCell>
           </TableRow>
 
           <TableRow>
             <TableCell sx={{ width: "500px", border: "1px solid black" }}>
-              Profit factor
+              Profit factor: {roundToTwo(statistics.profitFactor)}
             </TableCell>
             <TableCell sx={{ width: "500px", border: "1px solid black" }}>
-              Winrate
+              Winrate, %: {roundToTwo(statistics.winrate)}
             </TableCell>
             <TableCell sx={{ width: "500px", border: "1px solid black" }}>
-              Total trades
+              Total trades: {statistics.totalTrades}
             </TableCell>
           </TableRow>
-
           <TableRow>
             <TableCell
               colSpan={3}
               sx={{ height: "85vh", border: "1px solid black" }}
-            >
-              All trades
-            </TableCell>
+            ></TableCell>
           </TableRow>
         </TableBody>
       </Table>

@@ -13,13 +13,15 @@ const getUserTradeStatistics = async (userId) => {
       .where({ user_id: userId })
       .count("id as count")
       .first();
-    const averageDailyReturn = grossProfit / tradingDays;
+    const averageDailyReturn = tradingDays ? grossProfit / tradingDays : 0;
 
     // Calculate Average Profit
-    const { avg: averageProfit } = await db("trades")
+    const averageProfitResults = await db("trades")
       .where({ user_id: userId })
-      .avg("profit_loss as avg")
-      .first();
+      .select(db.raw("AVG(CAST(profit_loss AS NUMERIC)) as avg"));
+    const averageProfit = averageProfitResults[0]
+      ? averageProfitResults[0].avg
+      : 0;
 
     // Calculate Profit Factor
     const winnerLoser = await db("statisticoftradesforday")
@@ -27,7 +29,9 @@ const getUserTradeStatistics = async (userId) => {
       .sum("total_winners as winners")
       .sum("total_losers as losers")
       .first();
-    const profitFactor = (winnerLoser.winners / winnerLoser.losers) * 100;
+    const profitFactor = winnerLoser.losers
+      ? (winnerLoser.winners / winnerLoser.losers) * 100
+      : 0;
 
     // Calculate Winrate
     const { sum: totalWinners } = await db("statisticoftradesforday")
@@ -38,7 +42,7 @@ const getUserTradeStatistics = async (userId) => {
       .where({ user_id: userId })
       .sum("total_trades as sum")
       .first();
-    const winrate = (totalWinners / totalTrades) * 100;
+    const winrate = totalTrades ? (totalWinners / totalTrades) * 100 : 0;
 
     // Get All Trades
     const trades = await db("trades").where({ user_id: userId }).select("*");
