@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import TradeTable from "./TradesTableComponent";
 import ProfitChartComponent from "./ProfitChartComponent";
-import TradeStatisticsTable from "./TradeStatisticsTable"; // Import the new component
+import TradeStatisticsTable from "./TradeStatisticsTable";
 import { useLocation } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const DayStatisticComponent = () => {
   const [dataTrades, setDataTrades] = useState([]);
@@ -36,6 +37,29 @@ const DayStatisticComponent = () => {
       const data = await response.json();
       setDataTrades(data.trades);
       setTradeStatistics(data.tradeStatistics);
+    } catch (error) {
+      console.error("Error:", error);
+      setError(error.message);
+    }
+  };
+
+  const handleDeleteStatistics = async () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      console.error("User ID not found.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/profitdiary/delete-data/delete-data?selectedDate=${selectedDate}&userId=${userId}`,
+        { method: "DELETE" }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      fetchData();
     } catch (error) {
       console.error("Error:", error);
       setError(error.message);
@@ -79,11 +103,13 @@ const DayStatisticComponent = () => {
         alignItems: "center",
         justifyContent: "center",
         marginTop: "20px",
+        position: "relative",
       }}
     >
       <div style={{ marginBottom: "-220px" }}>
         <ProfitChartComponent trades={flattenTrades(dataTrades)} />
       </div>
+
       <div
         style={{
           display: "flex",
@@ -95,6 +121,20 @@ const DayStatisticComponent = () => {
         <TradeStatisticsTable tradeStatistics={tradeStatistics} />
         <TradeTable trades={flattenTrades(dataTrades)} />
       </div>
+
+      <Button
+        variant="contained"
+        color="primary"
+        style={{
+          position: "fixed",
+          right: "40px",
+          bottom: "60px",
+          backgroundColor: "black",
+        }}
+        onClick={handleDeleteStatistics}
+      >
+        Delete Statistics
+      </Button>
     </div>
   );
 };

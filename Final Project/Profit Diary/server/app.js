@@ -15,6 +15,9 @@ const {
 const {
   getMonthlyTradeStatsRoute,
 } = require("../server/routers/getMonthlyTradeStatistics.route.js");
+const {
+  deleteDataForDateAndUserRoute,
+} = require("../server/routers/deleteDataForUserAndDate.route.js");
 
 const app = express();
 app.use(cookieParser());
@@ -31,7 +34,7 @@ app.use("/profitdiary/daily-trades", getTradesRouter);
 app.use("/profitdiary/trades-upload", downloadTradesFromXLSXRouter);
 app.use("/profitdiary/trades-api", tradesRouter);
 app.use("/profitdiary/trade-summary", tradeStaticRoute);
-
+app.use("/profitdiary/delete-data", deleteDataForDateAndUserRoute);
 app.use("/profitdiary/auth", authRouter);
 app.use("/profitdiary", authenticateTokenRoute);
 

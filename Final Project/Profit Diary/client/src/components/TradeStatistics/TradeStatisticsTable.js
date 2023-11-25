@@ -1,6 +1,9 @@
 import React from "react";
 
 const TradeStatisticsTable = ({ tradeStatistics }) => {
+  if (!tradeStatistics) {
+    return <div>No trade statistics available</div>;
+  }
   const roundToTwoDecimals = (value) => {
     if (value === null || value === undefined) {
       return 0;
