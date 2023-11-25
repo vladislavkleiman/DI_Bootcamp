@@ -19,6 +19,10 @@ const {
   deleteDataForDateAndUserRoute,
 } = require("../server/routers/deleteDataForUserAndDate.route.js");
 
+const {
+  getUserTradeStatisticsRoute,
+} = require("../server/routers/getUserTradeStatistics.route.js");
+
 const app = express();
 app.use(cookieParser());
 
@@ -29,6 +33,7 @@ app.use((req, res, next) => {
 app.use(express.static("client"));
 app.use(express.json());
 app.use(cors());
+app.use("/profitdiary/user-statistics", getUserTradeStatisticsRoute);
 app.use("/profitdiary/trade-stats", getMonthlyTradeStatsRoute);
 app.use("/profitdiary/daily-trades", getTradesRouter);
 app.use("/profitdiary/trades-upload", downloadTradesFromXLSXRouter);

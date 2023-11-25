@@ -21,7 +21,7 @@ const MainStatictic = () => {
               Gross Profit
             </TableCell>
             <TableCell sx={{ width: "500px", border: "1px solid black" }}>
-              % to capital
+              Average Daily Return, $
             </TableCell>
             <TableCell sx={{ width: "500px", border: "1px solid black" }}>
               Avg profit
@@ -36,7 +36,7 @@ const MainStatictic = () => {
               Winrate
             </TableCell>
             <TableCell sx={{ width: "500px", border: "1px solid black" }}>
-              Gain to pain ratio
+              Total trades
             </TableCell>
           </TableRow>
 
