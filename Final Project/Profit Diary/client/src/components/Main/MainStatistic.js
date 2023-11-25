@@ -6,13 +6,38 @@ import {
   TableContainer,
   TableRow,
   Paper,
+  TableHead,
+  TablePagination,
 } from "@mui/material";
+
+import { parseISO, format, addDays, compareAsc } from "date-fns";
 
 const MainStatictic = () => {
   const [statistics, setStatistics] = useState({});
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const rowsPerPage = 13;
+
   const roundToTwo = (num) => {
     const number = parseFloat(num);
     return isNaN(number) ? 0 : number.toFixed(2);
+  };
+
+  const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    const adjustedDate = addDays(date, 0);
+    return format(adjustedDate, "yyyy-MM-dd");
+  };
+
+  const sortTrades = (trades) => {
+    return trades.sort((a, b) => {
+      const dateComparison = compareAsc(
+        parseISO(a.trade_date),
+        parseISO(b.trade_date)
+      );
+      if (dateComparison !== 0) return dateComparison;
+      return a.exectime.localeCompare(b.exectime);
+    });
   };
 
   useEffect(() => {
@@ -24,6 +49,9 @@ const MainStatictic = () => {
         );
         if (response.ok) {
           const data = await response.json();
+          if (data.trades) {
+            data.trades = sortTrades(data.trades);
+          }
           setStatistics(data);
         } else {
           console.error("Failed to fetch statistics");
@@ -35,6 +63,10 @@ const MainStatictic = () => {
 
     fetchStatistics();
   }, []);
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
+  };
 
   return (
     <TableContainer
@@ -71,7 +103,43 @@ const MainStatictic = () => {
             <TableCell
               colSpan={3}
               sx={{ height: "85vh", border: "1px solid black" }}
-            ></TableCell>
+            >
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Trade Date</TableCell>
+                    <TableCell>Execution Time</TableCell>
+                    <TableCell>Stock Ticker</TableCell>
+                    <TableCell>Trade Type</TableCell>
+                    <TableCell>Profit/Loss</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {statistics.trades
+                    ?.slice(
+                      currentPage * rowsPerPage,
+                      currentPage * rowsPerPage + rowsPerPage
+                    )
+                    .map((trade, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{formatDate(trade.trade_date)}</TableCell>
+                        <TableCell>{trade.exectime}</TableCell>
+                        <TableCell>{trade.stock_ticker}</TableCell>
+                        <TableCell>{trade.trade_type}</TableCell>
+                        <TableCell>{trade.profit_loss}</TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+              <TablePagination
+                component="div"
+                count={statistics.trades?.length || 0}
+                rowsPerPage={rowsPerPage}
+                page={currentPage}
+                onPageChange={handleChangePage}
+                rowsPerPageOptions={[15]} // To avoid changing rowsPerPage
+              />
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>
