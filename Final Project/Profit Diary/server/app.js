@@ -23,6 +23,10 @@ const {
   getUserTradeStatisticsRoute,
 } = require("../server/routers/getUserTradeStatistics.route.js");
 
+const {
+  getAllTimeUserTradeStatisticsRoute,
+} = require("../server/routers/getAllTimeUserTradeStatistics.route.js");
+
 const app = express();
 app.use(cookieParser());
 
@@ -40,6 +44,11 @@ app.use("/profitdiary/trades-upload", downloadTradesFromXLSXRouter);
 app.use("/profitdiary/trades-api", tradesRouter);
 app.use("/profitdiary/trade-summary", tradeStaticRoute);
 app.use("/profitdiary/delete-data", deleteDataForDateAndUserRoute);
+app.use(
+  "/profitdiary/all-time-user-statistics",
+  getAllTimeUserTradeStatisticsRoute
+);
+
 app.use("/profitdiary/auth", authRouter);
 app.use("/profitdiary", authenticateTokenRoute);
 

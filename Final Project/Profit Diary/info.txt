@@ -57,5 +57,19 @@ users for test:
 vlad123 vlad123
 vlad888 vlad888
 
+bigest loss and profit
+profit/loss ratio
+return $ on long
+return $ on short
+Average $ on losers
+Average $ on winners
+
+
+Gross profit
+Average Daily Return, $
+Profit factor
+Winrate, %:
+Average profit, $:
+Total trades:
 
 

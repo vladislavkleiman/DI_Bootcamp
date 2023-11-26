@@ -30,7 +30,7 @@ const getUserTradeStatistics = async (userId) => {
       .sum("total_losers as losers")
       .first();
     const profitFactor = winnerLoser.losers
-      ? (winnerLoser.winners / winnerLoser.losers) * 100
+      ? winnerLoser.winners / winnerLoser.losers
       : 0;
 
     // Calculate Winrate
