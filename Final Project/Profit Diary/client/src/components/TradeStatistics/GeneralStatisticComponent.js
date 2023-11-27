@@ -108,9 +108,14 @@ const ProfitabilityChart = () => {
 const StatisticsTable = ({ statistics }) => (
   <TableContainer
     component={Paper}
-    style={{ padding: "20px", marginTop: "15px" }}
+    style={{ padding: "20px", marginTop: "45px" }}
   >
-    <Typography variant="h6">Statistics Table</Typography>
+    <Typography
+      variant="h6"
+      style={{ textAlign: "center", marginBottom: "20px" }}
+    >
+      Statistics Table
+    </Typography>
     <Table>
       <TableBody>
         <TableRow>
@@ -171,7 +176,7 @@ const StatisticsTable = ({ statistics }) => (
 
 const TradesList = ({ trades }) => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [rowsPerPage, setRowsPerPage] = useState(13);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -189,7 +194,16 @@ const TradesList = ({ trades }) => {
   };
 
   return (
-    <TableContainer component={Paper} style={{ marginTop: "15px" }}>
+    <TableContainer
+      component={Paper}
+      style={{ marginTop: "15px", width: "500px" }}
+    >
+      <Typography
+        variant="h6"
+        style={{ textAlign: "center", marginBottom: "20px" }}
+      >
+        All trades
+      </Typography>
       <Table>
         <TableHead>
           <TableRow>
@@ -248,12 +262,12 @@ const GeneralStatisticComponent = () => {
 
   return (
     <Container>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+      <Grid container spacing={10}>
+        <Grid item xs={12} md={8}>
           <ProfitabilityChart />
           <StatisticsTable statistics={statistics} />
         </Grid>
-        <Grid item xs={12} md={5}>
+        <Grid item xs={12} md={4}>
           <TradesList trades={trades} />
         </Grid>
       </Grid>
