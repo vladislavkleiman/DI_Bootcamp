@@ -15,11 +15,66 @@ import {
 
 import { parseISO, format, addDays } from "date-fns";
 
-const ProfitabilityChart = () => (
-  <Paper style={{ padding: "20px", height: "300px" }}>
-    <Typography variant="h6">Profitability Chart Placeholder</Typography>
-  </Paper>
-);
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
+const ProfitabilityChart = () => {
+  const [profitData, setProfitData] = useState([]);
+
+  const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    const adjustedDate = addDays(date, 0);
+    return format(adjustedDate, "yyyy-MM-dd");
+  };
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    fetch(
+      `http://localhost:5000/profitdiary/chart-profit/user/trades/profit/${userId}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        // Sort and format data
+        const formattedData = data
+          .map((item) => ({
+            ...item,
+            date_trade: formatDate(item.date_trade),
+          }))
+          .sort((a, b) => new Date(a.date_trade) - new Date(b.date_trade));
+        setProfitData(formattedData);
+      })
+      .catch((error) => console.error("Error fetching profit data:", error));
+  }, []);
+
+  return (
+    <Paper style={{ padding: "20px", height: "300px" }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          data={profitData}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date_trade" />
+          <YAxis />
+          <Tooltip />
+          <Line
+            type="monotone"
+            dataKey="profitloss"
+            stroke="#8884d8"
+            activeDot={{ r: 8 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </Paper>
+  );
+};
 
 const StatisticsTable = ({ statistics }) => (
   <TableContainer

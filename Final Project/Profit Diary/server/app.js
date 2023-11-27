@@ -27,6 +27,10 @@ const {
   getAllTimeUserTradeStatisticsRoute,
 } = require("../server/routers/getAllTimeUserTradeStatistics.route.js");
 
+const {
+  getProfitForUserAllTimeRouter,
+} = require("../server/routers/profitChartAllTime.route.js");
+
 const app = express();
 app.use(cookieParser());
 
@@ -48,6 +52,7 @@ app.use(
   "/profitdiary/all-time-user-statistics",
   getAllTimeUserTradeStatisticsRoute
 );
+app.use("/profitdiary/chart-profit", getProfitForUserAllTimeRouter);
 
 app.use("/profitdiary/auth", authRouter);
 app.use("/profitdiary", authenticateTokenRoute);
