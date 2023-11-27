@@ -15,23 +15,26 @@ import {
 
 import { parseISO, format, addDays } from "date-fns";
 
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { Line } from "react-chartjs-2";
+import "chart.js/auto";
 
 const ProfitabilityChart = () => {
-  const [profitData, setProfitData] = useState([]);
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Cumulative Profit",
+        data: [],
+        fill: true,
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+      },
+    ],
+  });
 
   const formatDate = (dateString) => {
     const date = parseISO(dateString);
-    const adjustedDate = addDays(date, 0);
-    return format(adjustedDate, "yyyy-MM-dd");
+    return format(addDays(date, 0), "yyyy-MM-dd");
   };
 
   useEffect(() => {
@@ -41,38 +44,64 @@ const ProfitabilityChart = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        // Sort and format data
+        if (!Array.isArray(data) || !data.length) {
+          // Handle the case where data is not an array or is empty
+          console.error("Received data is not an array or is empty");
+          return;
+        }
+
         const formattedData = data
           .map((item) => ({
             ...item,
             date_trade: formatDate(item.date_trade),
           }))
           .sort((a, b) => new Date(a.date_trade) - new Date(b.date_trade));
-        setProfitData(formattedData);
+
+        let cumulativeProfit = [0];
+        formattedData.forEach((trade, index) => {
+          let lastProfit = cumulativeProfit[index];
+          cumulativeProfit.push(lastProfit + parseFloat(trade.profitloss));
+        });
+
+        setChartData({
+          labels: formattedData.map((item) => item.date_trade),
+          datasets: [
+            {
+              label: "Cumulative Profit",
+              data: cumulativeProfit.slice(1), // Skip the initial zero
+              fill: true,
+              borderColor: "rgba(75, 192, 192, 1)",
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+            },
+          ],
+        });
       })
-      .catch((error) => console.error("Error fetching profit data:", error));
+      .catch((error) => {
+        console.error("Error fetching profit data:", error);
+        // Handle the error state properly here
+      });
   }, []);
 
+  const chartOptions = {
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function (value) {
+            return "$" + value;
+          },
+        },
+      },
+    },
+  };
+
   return (
-    <Paper style={{ padding: "20px", height: "300px" }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={profitData}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date_trade" />
-          <YAxis />
-          <Tooltip />
-          <Line
-            type="monotone"
-            dataKey="profitloss"
-            stroke="#8884d8"
-            activeDot={{ r: 8 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </Paper>
+    <div
+      className="chart-container"
+      style={{ width: "800px", height: "400px" }}
+    >
+      <Line data={chartData} options={chartOptions} />
+    </div>
   );
 };
 
