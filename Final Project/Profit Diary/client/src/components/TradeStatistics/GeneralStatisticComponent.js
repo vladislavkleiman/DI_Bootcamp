@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Typography,
+  TablePagination,
 } from "@mui/material";
 
 import { parseISO, format, addDays } from "date-fns";
@@ -17,7 +18,6 @@ import { parseISO, format, addDays } from "date-fns";
 const ProfitabilityChart = () => (
   <Paper style={{ padding: "20px", height: "300px" }}>
     <Typography variant="h6">Profitability Chart Placeholder</Typography>
-    {/* Implement chart */}
   </Paper>
 );
 
@@ -30,10 +30,10 @@ const StatisticsTable = ({ statistics }) => (
     <Table>
       <TableBody>
         <TableRow>
-          <TableCell>Gross Profit</TableCell>
+          <TableCell>Gross Profit, $:</TableCell>
           <TableCell>{statistics.grossProfit}</TableCell>
 
-          <TableCell>Biggest Loss</TableCell>
+          <TableCell>Biggest Loss, $:</TableCell>
           <TableCell>
             {statistics.biggestLoss
               ? statistics.biggestLoss.profit_loss
@@ -41,9 +41,9 @@ const StatisticsTable = ({ statistics }) => (
           </TableCell>
         </TableRow>
         <TableRow>
-          <TableCell>Average Daily Return</TableCell>
+          <TableCell>Average Daily Return, $:</TableCell>
           <TableCell>{statistics.averageDailyReturn}</TableCell>
-          <TableCell>Biggest Profit</TableCell>
+          <TableCell>Biggest Profit, $:</TableCell>
           <TableCell>
             {statistics.biggestProfit
               ? statistics.biggestProfit.profit_loss
@@ -51,23 +51,23 @@ const StatisticsTable = ({ statistics }) => (
           </TableCell>
         </TableRow>
         <TableRow>
-          <TableCell>Average Profit</TableCell>
+          <TableCell>Average Profit, $:</TableCell>
           <TableCell>
             {parseFloat(statistics.averageProfit).toFixed(2)}
           </TableCell>
-          <TableCell>Return on Long</TableCell>
+          <TableCell>Return on Long, $:</TableCell>
           <TableCell>{statistics.returnOnLong}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Profit Factor</TableCell>
           <TableCell>{statistics.profitFactor}</TableCell>
-          <TableCell>Return on Short</TableCell>
+          <TableCell>Return on Short, $:</TableCell>
           <TableCell>{statistics.returnOnShort}</TableCell>
         </TableRow>
         <TableRow>
-          <TableCell>Winrate</TableCell>
+          <TableCell>Winrate, %:</TableCell>
           <TableCell>{parseFloat(statistics.winrate).toFixed(2)}</TableCell>
-          <TableCell>Average Losses</TableCell>
+          <TableCell>Average Losses, $:</TableCell>
           <TableCell>
             {parseFloat(statistics.averageLosses).toFixed(2)}
           </TableCell>
@@ -75,7 +75,7 @@ const StatisticsTable = ({ statistics }) => (
         <TableRow>
           <TableCell>Total Trades</TableCell>
           <TableCell>{statistics.totalTrades}</TableCell>
-          <TableCell>Average Winners</TableCell>
+          <TableCell>Average Winners, $:</TableCell>
           <TableCell>
             {parseFloat(statistics.averageWinners).toFixed(2)}
           </TableCell>
@@ -86,6 +86,18 @@ const StatisticsTable = ({ statistics }) => (
 );
 
 const TradesList = ({ trades }) => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(15);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const formatDate = (dateString) => {
     const date = parseISO(dateString);
     const adjustedDate = addDays(date, 0);
@@ -107,17 +119,28 @@ const TradesList = ({ trades }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {trades.map((trade, index) => (
-            <TableRow key={index}>
-              <TableCell>{formatDate(trade.trade_date)}</TableCell>
-              <TableCell>{trade.exectime}</TableCell>
-              <TableCell>{trade.stock_ticker}</TableCell>
-              <TableCell>{trade.trade_type}</TableCell>
-              <TableCell>${trade.profit_loss}</TableCell>
-            </TableRow>
-          ))}
+          {trades
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((trade, index) => (
+              <TableRow key={index}>
+                <TableCell>{formatDate(trade.trade_date)}</TableCell>
+                <TableCell>{trade.exectime}</TableCell>
+                <TableCell>{trade.stock_ticker}</TableCell>
+                <TableCell>{trade.trade_type}</TableCell>
+                <TableCell>${trade.profit_loss}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
+      <TablePagination
+        rowsPerPageOptions={[10]}
+        component="div"
+        count={trades.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </TableContainer>
   );
 };
