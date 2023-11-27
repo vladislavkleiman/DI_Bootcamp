@@ -14,7 +14,6 @@ import {
 
 import { parseISO, format, addDays } from "date-fns";
 
-// Placeholder for the Profitability Chart
 const ProfitabilityChart = () => (
   <Paper style={{ padding: "20px", height: "300px" }}>
     <Typography variant="h6">Profitability Chart Placeholder</Typography>
@@ -22,7 +21,6 @@ const ProfitabilityChart = () => (
   </Paper>
 );
 
-// Updated StatisticsTable component to accept statistics data
 const StatisticsTable = ({ statistics }) => (
   <TableContainer
     component={Paper}
@@ -30,18 +28,11 @@ const StatisticsTable = ({ statistics }) => (
   >
     <Typography variant="h6">Statistics Table</Typography>
     <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Indicator</TableCell>
-          <TableCell>Value</TableCell>
-          <TableCell>Indicator</TableCell>
-          <TableCell>Value</TableCell>
-        </TableRow>
-      </TableHead>
       <TableBody>
         <TableRow>
           <TableCell>Gross Profit</TableCell>
           <TableCell>{statistics.grossProfit}</TableCell>
+
           <TableCell>Biggest Loss</TableCell>
           <TableCell>
             {statistics.biggestLoss
@@ -61,7 +52,9 @@ const StatisticsTable = ({ statistics }) => (
         </TableRow>
         <TableRow>
           <TableCell>Average Profit</TableCell>
-          <TableCell>{statistics.averageProfit}</TableCell>
+          <TableCell>
+            {parseFloat(statistics.averageProfit).toFixed(2)}
+          </TableCell>
           <TableCell>Return on Long</TableCell>
           <TableCell>{statistics.returnOnLong}</TableCell>
         </TableRow>
@@ -73,22 +66,25 @@ const StatisticsTable = ({ statistics }) => (
         </TableRow>
         <TableRow>
           <TableCell>Winrate</TableCell>
-          <TableCell>{statistics.winrate}</TableCell>
+          <TableCell>{parseFloat(statistics.winrate).toFixed(2)}</TableCell>
           <TableCell>Average Losses</TableCell>
-          <TableCell>{statistics.averageLosses}</TableCell>
+          <TableCell>
+            {parseFloat(statistics.averageLosses).toFixed(2)}
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Total Trades</TableCell>
           <TableCell>{statistics.totalTrades}</TableCell>
           <TableCell>Average Winners</TableCell>
-          <TableCell>{statistics.averageWinners}</TableCell>
+          <TableCell>
+            {parseFloat(statistics.averageWinners).toFixed(2)}
+          </TableCell>
         </TableRow>
       </TableBody>
     </Table>
   </TableContainer>
 );
 
-// Updated TradesList component to accept trades data
 const TradesList = ({ trades }) => {
   const formatDate = (dateString) => {
     const date = parseISO(dateString);
@@ -101,7 +97,9 @@ const TradesList = ({ trades }) => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Trade Date</TableCell>
+            <TableCell style={{ width: "40%", flexGrow: 1 }}>
+              Trade Date
+            </TableCell>
             <TableCell>Execution Time</TableCell>
             <TableCell>Stock Ticker</TableCell>
             <TableCell>Trade Type</TableCell>
@@ -115,7 +113,7 @@ const TradesList = ({ trades }) => {
               <TableCell>{trade.exectime}</TableCell>
               <TableCell>{trade.stock_ticker}</TableCell>
               <TableCell>{trade.trade_type}</TableCell>
-              <TableCell>{trade.profit_loss}</TableCell>
+              <TableCell>${trade.profit_loss}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -144,11 +142,11 @@ const GeneralStatisticComponent = () => {
   return (
     <Container>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={6}>
           <ProfitabilityChart />
           <StatisticsTable statistics={statistics} />
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={5}>
           <TradesList trades={trades} />
         </Grid>
       </Grid>
