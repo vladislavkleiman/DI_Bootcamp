@@ -45,7 +45,6 @@ const ProfitabilityChart = () => {
       .then((response) => response.json())
       .then((data) => {
         if (!Array.isArray(data) || !data.length) {
-          // Handle the case where data is not an array or is empty
           console.error("Received data is not an array or is empty");
           return;
         }
@@ -68,7 +67,7 @@ const ProfitabilityChart = () => {
           datasets: [
             {
               label: "Cumulative Profit",
-              data: cumulativeProfit.slice(1), // Skip the initial zero
+              data: cumulativeProfit.slice(1),
               fill: true,
               borderColor: "rgba(75, 192, 192, 1)",
               backgroundColor: "rgba(75, 192, 192, 0.2)",
@@ -78,7 +77,6 @@ const ProfitabilityChart = () => {
       })
       .catch((error) => {
         console.error("Error fetching profit data:", error);
-        // Handle the error state properly here
       });
   }, []);
 
@@ -96,12 +94,20 @@ const ProfitabilityChart = () => {
   };
 
   return (
-    <div
-      className="chart-container"
-      style={{ width: "800px", height: "400px" }}
-    >
-      <Line data={chartData} options={chartOptions} />
-    </div>
+    <>
+      <Typography
+        variant="h6"
+        style={{ textAlign: "center", marginBottom: "20px", marginTop: "20px" }}
+      >
+        Profit Chart
+      </Typography>
+      <div
+        className="chart-container"
+        style={{ width: "800px", height: "400px" }}
+      >
+        <Line data={chartData} options={chartOptions} />
+      </div>
+    </>
   );
 };
 
