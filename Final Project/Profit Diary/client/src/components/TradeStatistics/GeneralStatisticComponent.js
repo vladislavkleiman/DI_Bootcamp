@@ -11,6 +11,8 @@ import {
   TableRow,
   Typography,
   TablePagination,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 
 import { parseISO, format, addDays } from "date-fns";
@@ -252,19 +254,44 @@ const TradesList = ({ trades }) => {
 const GeneralStatisticComponent = () => {
   const [statistics, setStatistics] = useState({});
   const [trades, setTrades] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-    fetch(
-      `http://localhost:5000/profitdiary/all-time-user-statistics/user/${userId}/trade-statistics`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setStatistics(data);
-        setTrades(data.trades || []);
+    Promise.all([
+      fetch(
+        `http://localhost:5000/profitdiary/all-time-user-statistics/user/${userId}/trade-statistics`
+      ),
+    ])
+      .then(async ([tradeStatsResponse]) => {
+        const tradeStatsData = await tradeStatsResponse.json();
+        setStatistics(tradeStatsData);
+        setTrades(tradeStatsData.trades || []);
+        setLoading(false);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
   }, []);
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Box textAlign="center">
+          <CircularProgress size={80} style={{ color: "black" }} />{" "}
+          <Typography variant="h6" style={{ marginTop: "20px" }}>
+            Loading...
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Container>

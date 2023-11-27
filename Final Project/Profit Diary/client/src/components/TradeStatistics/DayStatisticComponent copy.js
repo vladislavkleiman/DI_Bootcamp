@@ -3,7 +3,7 @@ import TradeTable from "./TradesTableComponent";
 import ProfitChartComponent from "./ProfitChartComponent";
 import TradeStatisticsTable from "./TradeStatisticsTable";
 import { useLocation } from "react-router-dom";
-import { Button, CircularProgress, Typography, Box } from "@mui/material";
+import { Button } from "@mui/material";
 
 const DayStatisticComponent = () => {
   const [dataTrades, setDataTrades] = useState([]);
@@ -11,14 +11,12 @@ const DayStatisticComponent = () => {
   const [error, setError] = useState(null);
   const location = useLocation();
   const selectedDate = location.state?.date || "default-date-value";
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    setLoading(true);
     const userId = localStorage.getItem("userId");
     if (!userId) {
       console.error("User ID not found.");
@@ -39,7 +37,6 @@ const DayStatisticComponent = () => {
       const data = await response.json();
       setDataTrades(data.trades);
       setTradeStatistics(data.tradeStatistics);
-      setLoading(false);
     } catch (error) {
       console.error("Error:", error);
       setError(error.message);
@@ -85,24 +82,6 @@ const DayStatisticComponent = () => {
       };
     });
   };
-
-  if (loading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-      >
-        <Box textAlign="center">
-          <CircularProgress size={80} style={{ color: "black" }} />{" "}
-          <Typography variant="h6" style={{ marginTop: "20px" }}>
-            Loading...
-          </Typography>
-        </Box>
-      </Box>
-    );
-  }
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

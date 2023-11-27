@@ -8,9 +8,6 @@ import {
   Paper,
   TableHead,
   TablePagination,
-  CircularProgress,
-  Typography,
-  Box,
 } from "@mui/material";
 
 import { parseISO, format, addDays, compareAsc } from "date-fns";
@@ -47,7 +44,6 @@ const MainStatictic = () => {
   useEffect(() => {
     const fetchStatistics = async () => {
       const userId = localStorage.getItem("userId");
-      setLoading(true);
       try {
         const response = await fetch(
           `http://localhost:5000/profitdiary/user-statistics/user/${userId}/statistics`
@@ -64,29 +60,10 @@ const MainStatictic = () => {
       } catch (error) {
         console.error("Error fetching statistics:", error);
       }
-      setLoading(false);
     };
 
     fetchStatistics();
   }, []);
-
-  if (loading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-      >
-        <Box textAlign="center">
-          <CircularProgress size={80} style={{ color: "black" }} />{" "}
-          <Typography variant="h6" style={{ marginTop: "20px" }}>
-            Loading...
-          </Typography>
-        </Box>
-      </Box>
-    );
-  }
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
@@ -150,7 +127,7 @@ const MainStatictic = () => {
                         <TableCell>{trade.exectime}</TableCell>
                         <TableCell>{trade.stock_ticker}</TableCell>
                         <TableCell>{trade.trade_type}</TableCell>
-                        <TableCell>${trade.profit_loss}</TableCell>
+                        <TableCell>{trade.profit_loss}</TableCell>
                       </TableRow>
                     ))}
                 </TableBody>
