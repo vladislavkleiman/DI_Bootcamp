@@ -14,6 +14,7 @@ import {
   TableRow,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import TradingViewWidget from "./TradingViewWidget";
 
 const StockHeader = ({ data, quote }) => {
   const formatNumber = (num) => {
@@ -85,12 +86,13 @@ const StockHeader = ({ data, quote }) => {
 };
 
 // Stock Chart Component (Placeholder)
-const StockChart = () => (
-  <Paper style={{ padding: "20px", height: "300px", width: "1200px" }}>
-    <Typography variant="h6">Stock Chart Placeholder</Typography>
-    {/* Implement chart */}
-  </Paper>
-);
+const StockChart = ({ symbol }) => {
+  return (
+    <Paper style={{ padding: "20px", height: "600px", width: "1200px" }}>
+      <TradingViewWidget symbol={symbol} />
+    </Paper>
+  );
+};
 
 const StockDetails = ({ data }) => {
   const formatNumber = (num, appendB = false) => {
@@ -102,7 +104,7 @@ const StockDetails = ({ data }) => {
   };
 
   return (
-    <Paper style={{ padding: "20px", width: "1200px" }}>
+    <Paper style={{ padding: "20px", width: "500px" }}>
       <Typography variant="h6">Stock Details</Typography>
       <TableContainer>
         <Table>
@@ -308,11 +310,17 @@ const RecentFilings = () => (
 
 const InfoAboutStockComponent = () => {
   const [ticker, setTicker] = useState("");
+  const [activeSymbol, setActiveSymbol] = useState(""); // New state for the active symbol
   const [stockData, setStockData] = useState(null);
   const [stockQuote, setStockQuote] = useState(null);
 
   const handleInputChange = (event) => {
     setTicker(event.target.value);
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    await fetchStockData();
   };
 
   const fetchStockData = async () => {
@@ -337,6 +345,7 @@ const InfoAboutStockComponent = () => {
 
       setStockData(overviewData);
       setStockQuote(quoteData["Global Quote"]);
+      setActiveSymbol(ticker); // Update the activeSymbol here
     } catch (error) {
       console.error("Failed to fetch stock data:", error);
     }
@@ -346,22 +355,24 @@ const InfoAboutStockComponent = () => {
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <TextField
-            style={{ marginTop: "20px" }}
-            fullWidth
-            label="Enter the company ticker"
-            variant="outlined"
-            value={ticker}
-            onChange={handleInputChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Button onClick={fetchStockData}>Search</Button>
+          <form onSubmit={handleFormSubmit}>
+            <TextField
+              style={{ marginTop: "20px" }}
+              fullWidth
+              label="Enter the company ticker"
+              variant="outlined"
+              value={ticker}
+              onChange={handleInputChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Button type="submit">Search</Button>
+          </form>
         </Grid>
         {stockData && (
           <>
@@ -369,7 +380,7 @@ const InfoAboutStockComponent = () => {
               <StockHeader data={stockData} quote={stockQuote} />
             </Grid>
             <Grid item xs={12}>
-              <StockChart />
+              <StockChart symbol={activeSymbol} />
             </Grid>
             <Grid item xs={12}>
               <StockDetails data={stockData} />

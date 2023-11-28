@@ -14,7 +14,6 @@ import {
   TableRow,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import TradingViewWidget from "./TradingViewWidget";
 
 const StockHeader = ({ data, quote }) => {
   const formatNumber = (num) => {
@@ -86,13 +85,12 @@ const StockHeader = ({ data, quote }) => {
 };
 
 // Stock Chart Component (Placeholder)
-const StockChart = ({ symbol }) => {
-  return (
-    <Paper style={{ padding: "20px", height: "300px", width: "1200px" }}>
-      <TradingViewWidget symbol={symbol} />
-    </Paper>
-  );
-};
+const StockChart = () => (
+  <Paper style={{ padding: "20px", height: "300px", width: "1200px" }}>
+    <Typography variant="h6">Stock Chart Placeholder</Typography>
+    {/* Implement chart */}
+  </Paper>
+);
 
 const StockDetails = ({ data }) => {
   const formatNumber = (num, appendB = false) => {
@@ -104,7 +102,7 @@ const StockDetails = ({ data }) => {
   };
 
   return (
-    <Paper style={{ padding: "20px", width: "500px" }}>
+    <Paper style={{ padding: "20px", width: "1200px" }}>
       <Typography variant="h6">Stock Details</Typography>
       <TableContainer>
         <Table>
@@ -310,7 +308,6 @@ const RecentFilings = () => (
 
 const InfoAboutStockComponent = () => {
   const [ticker, setTicker] = useState("");
-  const [activeSymbol, setActiveSymbol] = useState(""); // New state for the active symbol
   const [stockData, setStockData] = useState(null);
   const [stockQuote, setStockQuote] = useState(null);
 
@@ -340,7 +337,6 @@ const InfoAboutStockComponent = () => {
 
       setStockData(overviewData);
       setStockQuote(quoteData["Global Quote"]);
-      setActiveSymbol(ticker); // Update the activeSymbol here
     } catch (error) {
       console.error("Failed to fetch stock data:", error);
     }
@@ -373,7 +369,7 @@ const InfoAboutStockComponent = () => {
               <StockHeader data={stockData} quote={stockQuote} />
             </Grid>
             <Grid item xs={12}>
-              <StockChart symbol={activeSymbol} />
+              <StockChart />
             </Grid>
             <Grid item xs={12}>
               <StockDetails data={stockData} />
