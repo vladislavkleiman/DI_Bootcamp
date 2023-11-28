@@ -85,7 +85,6 @@ const StockHeader = ({ data, quote }) => {
   );
 };
 
-// Stock Chart Component (Placeholder)
 const StockChart = ({ symbol }) => {
   return (
     <Paper style={{ padding: "20px", height: "600px", width: "1200px" }}>
@@ -293,16 +292,60 @@ const StockDetails = ({ data }) => {
   );
 };
 
-const RecentNews = () => (
-  <Paper style={{ padding: "20px", width: "580px" }}>
-    <Typography variant="h6">Recent News Placeholder</Typography>
-    {/* Implement news list */}
-  </Paper>
-);
+const RecentNews = ({ symbol }) => {
+  const [news, setNews] = useState([]);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      if (!symbol) return;
+
+      try {
+        const response = await fetch(
+          `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=${symbol}&apikey=ML3BNOFVO4303ESB`
+        );
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        setNews(data.feed.slice(0, 20));
+      } catch (error) {
+        console.error("Failed to fetch news data:", error);
+      }
+    };
+
+    fetchNews();
+  }, [symbol]);
+
+  const formatDate = (timeString) => {
+    const year = timeString.substring(0, 4);
+    const month = timeString.substring(4, 6);
+    const day = timeString.substring(6, 8);
+    const time = timeString.substring(9, 15);
+    return `${year}-${month}-${day} ${time}`;
+  };
+
+  return (
+    <Paper style={{ padding: "20px", width: "580px" }}>
+      <Typography variant="h6">Recent News</Typography>
+      <div>
+        {news.map((article, index) => (
+          <div key={index}>
+            <Typography variant="body1">
+              {formatDate(article.time_published)} -
+              <a href={article.url} target="_blank" rel="noopener noreferrer">
+                {article.title}
+              </a>
+            </Typography>
+          </div>
+        ))}
+      </div>
+    </Paper>
+  );
+};
 
 const InfoAboutStockComponent = () => {
   const [ticker, setTicker] = useState("");
-  const [activeSymbol, setActiveSymbol] = useState(""); // New state for the active symbol
+  const [activeSymbol, setActiveSymbol] = useState("");
   const [stockData, setStockData] = useState(null);
   const [stockQuote, setStockQuote] = useState(null);
 
@@ -337,7 +380,7 @@ const InfoAboutStockComponent = () => {
 
       setStockData(overviewData);
       setStockQuote(quoteData["Global Quote"]);
-      setActiveSymbol(ticker); // Update the activeSymbol here
+      setActiveSymbol(ticker);
     } catch (error) {
       console.error("Failed to fetch stock data:", error);
     }
@@ -374,11 +417,14 @@ const InfoAboutStockComponent = () => {
             <Grid item xs={12}>
               <StockChart symbol={activeSymbol} />
             </Grid>
-            <Grid item xs={12}>
-              <StockDetails data={stockData} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <RecentNews />
+
+            <Grid container item xs={12} spacing={2}>
+              <Grid item xs={12} md={6}>
+                <StockDetails data={stockData} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <RecentNews symbol={activeSymbol} />
+              </Grid>
             </Grid>
           </>
         )}

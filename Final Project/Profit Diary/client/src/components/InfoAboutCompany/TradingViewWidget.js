@@ -2,12 +2,11 @@ import React, { useEffect } from "react";
 
 const TradingViewWidget = ({ symbol }) => {
   useEffect(() => {
-    // Function to create the widget
     const createWidget = () => {
       if (window.TradingView && document.getElementById("tradingview_widget")) {
         new window.TradingView.widget({
           autosize: true,
-          symbol: symbol || "NASDAQ:AAPL", // Default to NASDAQ:AAPL if no symbol is provided
+          symbol: symbol || "NASDAQ:AAPL", 
           interval: "D",
           timezone: "Etc/UTC",
           theme: "dark",
@@ -20,7 +19,7 @@ const TradingViewWidget = ({ symbol }) => {
       }
     };
 
-    // Load TradingView script if not already loaded
+
     if (!window.TradingView) {
       const script = document.createElement("script");
       script.src = "https://s3.tradingview.com/tv.js";
@@ -31,7 +30,7 @@ const TradingViewWidget = ({ symbol }) => {
       createWidget();
     }
 
-    // Cleanup function
+
     return () => {
       const widgetContainer = document.getElementById("tradingview_widget");
       if (widgetContainer) {
@@ -40,7 +39,7 @@ const TradingViewWidget = ({ symbol }) => {
         }
       }
     };
-  }, [symbol]); // Re-run the effect when the symbol changes
+  }, [symbol]); 
 
   return (
     <div id="tradingview_widget" style={{ height: "100%", width: "100%" }} />
