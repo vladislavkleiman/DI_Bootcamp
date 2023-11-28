@@ -300,14 +300,6 @@ const RecentNews = () => (
   </Paper>
 );
 
-// Recent Filings Component (Placeholder)
-const RecentFilings = () => (
-  <Paper style={{ padding: "20px", width: "585px", marginLeft: "30px" }}>
-    <Typography variant="h6">Recent Filings Placeholder</Typography>
-    {/* Implement filings list */}
-  </Paper>
-);
-
 const InfoAboutStockComponent = () => {
   const [ticker, setTicker] = useState("");
   const [activeSymbol, setActiveSymbol] = useState(""); // New state for the active symbol
@@ -387,9 +379,6 @@ const InfoAboutStockComponent = () => {
             </Grid>
             <Grid item xs={12} md={6}>
               <RecentNews />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <RecentFilings />
             </Grid>
           </>
         )}
