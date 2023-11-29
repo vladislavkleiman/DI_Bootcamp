@@ -141,9 +141,7 @@ function SideBar(props) {
           alignItems: "center",
           justifyContent: "center",
         }}
-      >
-        <MaterialUISwitch checked={isSwitchOn} onChange={handleSwitchChange} />
-      </div>
+      ></div>
     </div>
   );
 
