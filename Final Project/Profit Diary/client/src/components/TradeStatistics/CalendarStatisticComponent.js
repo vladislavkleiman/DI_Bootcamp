@@ -59,7 +59,7 @@ const CalendarStatisticComponent = () => {
       const data = await response.json();
       console.log("Response data:", data);
 
-      // Clear existing classes
+
       document.querySelectorAll(".profit-cell, .loss-cell").forEach((cell) => {
         cell.classList.remove("profit-cell", "loss-cell");
       });
@@ -222,7 +222,7 @@ const CalendarStatisticComponent = () => {
           {listData.map((item, index) => (
             <li
               key={index}
-              style={{ position: "relative", listStyle: "none" }} // Remove dots
+              style={{ position: "relative", listStyle: "none" }} 
               className={item.cellClass}
             >
               <span

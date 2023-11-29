@@ -307,7 +307,7 @@ const RecentNews = ({ symbol }) => {
           throw new Error(`Error: ${response.status}`);
         }
         const data = await response.json();
-        setNews(data.feed.slice(0, 20));
+        setNews(data.feed.slice(0, 24));
       } catch (error) {
         console.error("Failed to fetch news data:", error);
       }
