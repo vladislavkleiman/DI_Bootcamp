@@ -35,13 +35,16 @@ const RegisterComponent = () => {
       }
 
       const data = await response.json();
-      console.log(data);
-
-      if (data.id) {
+      if (data.error) {
+        alert(data.error);
+      } else if (data.id) {
+        console.log(data);
+        alert("Successfully registered!");
         navigate("/login");
       }
     } catch (error) {
       console.error("Error during registration:", error);
+      alert("An error occurred during registration. Please try again.");
     }
   };
 

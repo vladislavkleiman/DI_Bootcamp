@@ -13,7 +13,8 @@ import RegisterComponent from "./components/Login/RegisterComponent";
 
 const App = () => {
   const location = useLocation();
-  const showSidebar = location.pathname !== "/";
+  const showSidebar =
+    location.pathname !== "/" && location.pathname !== "/register";
 
   return (
     <>
