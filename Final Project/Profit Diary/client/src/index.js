@@ -9,6 +9,7 @@ import GeneralStatisticComponent from "./components/TradeStatistics/GeneralStati
 import NoteDiaryComponent from "./components/Diary/NoteDiaryComponent";
 import DayStatisticComponent from "./components/TradeStatistics/DayStatisticComponent";
 import SideBar from "./components/Main/SideBar";
+import RegisterComponent from "./components/Login/RegisterComponent";
 
 const App = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const App = () => {
       {showSidebar && <SideBar />}
       <Routes>
         <Route path="/" element={<LoginComponent />} />
+        <Route path="/register" element={<RegisterComponent />} />
         <Route path="/home" element={<HomeComponent />} />
         <Route path="/diary" element={<NoteDiaryComponent />} />
         <Route path="/calendar" element={<CalendarStatisticComponent />} />

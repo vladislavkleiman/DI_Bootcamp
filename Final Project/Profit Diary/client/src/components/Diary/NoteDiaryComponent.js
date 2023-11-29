@@ -78,14 +78,20 @@ const NoteDiaryComponent = () => {
     return style;
   };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+  };
+
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "center",
         height: "100vh",
+        marginLeft: "20%",
+        marginTop: "-200px",
       }}
     >
       <Button
@@ -122,7 +128,7 @@ const NoteDiaryComponent = () => {
             type="text"
             fullWidth
             multiline
-            rows={4}
+            rows={8}
             variant="standard"
             name="content"
             value={newNote.content}
@@ -153,10 +159,9 @@ const NoteDiaryComponent = () => {
               }
               label="Underline"
             />
-            {/* Implement list conversion and file upload here */}
             <IconButton color="primary" component="label">
               <AttachFileIcon />
-              <input type="file" hidden />
+              <input type="file" hidden onChange={handleFileUpload} />
             </IconButton>
           </div>
         </DialogContent>
@@ -190,11 +195,10 @@ const NoteDiaryComponent = () => {
             }
           >
             <ListItemButton onClick={() => toggleNote(index)}>
-              <ListItemText
-                primary={note.title}
-                secondary={note.content}
-                style={applyStyle()}
-              />
+              <ListItemText primary={note.title} style={applyStyle()} />
+              {expandedNote === index && (
+                <ListItemText secondary={note.content} />
+              )}
             </ListItemButton>
           </ListItem>
         ))}

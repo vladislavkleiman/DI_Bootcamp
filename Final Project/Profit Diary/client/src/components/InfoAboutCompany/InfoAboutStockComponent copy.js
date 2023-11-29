@@ -14,6 +14,7 @@ import {
   TableRow,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import TradingViewWidget from "./TradingViewWidget";
 
 const StockHeader = ({ data, quote }) => {
   const formatNumber = (num) => {
@@ -84,13 +85,13 @@ const StockHeader = ({ data, quote }) => {
   );
 };
 
-// Stock Chart Component (Placeholder)
-const StockChart = () => (
-  <Paper style={{ padding: "20px", height: "300px", width: "1200px" }}>
-    <Typography variant="h6">Stock Chart Placeholder</Typography>
-    {/* Implement chart */}
-  </Paper>
-);
+const StockChart = ({ symbol }) => {
+  return (
+    <Paper style={{ padding: "20px", height: "600px", width: "1200px" }}>
+      <TradingViewWidget symbol={symbol} />
+    </Paper>
+  );
+};
 
 const StockDetails = ({ data }) => {
   const formatNumber = (num, appendB = false) => {
@@ -102,7 +103,7 @@ const StockDetails = ({ data }) => {
   };
 
   return (
-    <Paper style={{ padding: "20px", width: "1200px" }}>
+    <Paper style={{ padding: "20px", width: "500px" }}>
       <Typography variant="h6">Stock Details</Typography>
       <TableContainer>
         <Table>
@@ -291,28 +292,75 @@ const StockDetails = ({ data }) => {
   );
 };
 
-const RecentNews = () => (
-  <Paper style={{ padding: "20px", width: "580px" }}>
-    <Typography variant="h6">Recent News Placeholder</Typography>
-    {/* Implement news list */}
-  </Paper>
-);
+const RecentNews = ({ symbol }) => {
+  const [news, setNews] = useState([]);
 
-// Recent Filings Component (Placeholder)
-const RecentFilings = () => (
-  <Paper style={{ padding: "20px", width: "585px", marginLeft: "30px" }}>
-    <Typography variant="h6">Recent Filings Placeholder</Typography>
-    {/* Implement filings list */}
-  </Paper>
-);
+  useEffect(() => {
+    const fetchNews = async () => {
+      if (!symbol) return;
+
+      try {
+        const response = await fetch(
+          `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=${symbol}&apikey=ML3BNOFVO4303ESB`
+        );
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        setNews(data.feed.slice(0, 24));
+      } catch (error) {
+        console.error("Failed to fetch news data:", error);
+      }
+    };
+
+    fetchNews();
+  }, [symbol]);
+
+  const formatDate = (timeString) => {
+    const year = timeString.substring(0, 4);
+    const month = timeString.substring(4, 6);
+    const day = timeString.substring(6, 8);
+    return `${year}-${month}-${day}`;
+  };
+
+  return (
+    <Paper style={{ padding: "20px", width: "580px" }}>
+      <Typography variant="h6">Recent News</Typography>
+      <div>
+        {news.map((article, index) => (
+          <div
+            key={index}
+            style={{
+              marginBottom: "8px",
+              borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <Typography variant="body1" style={{ lineHeight: "1.5" }}>
+              {formatDate(article.time_published)} -{" "}
+              <a href={article.url} target="_blank" rel="noopener noreferrer">
+                {article.title}
+              </a>
+            </Typography>
+          </div>
+        ))}
+      </div>
+    </Paper>
+  );
+};
 
 const InfoAboutStockComponent = () => {
   const [ticker, setTicker] = useState("");
+  const [activeSymbol, setActiveSymbol] = useState("");
   const [stockData, setStockData] = useState(null);
   const [stockQuote, setStockQuote] = useState(null);
 
   const handleInputChange = (event) => {
     setTicker(event.target.value);
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    await fetchStockData();
   };
 
   const fetchStockData = async () => {
@@ -337,6 +385,7 @@ const InfoAboutStockComponent = () => {
 
       setStockData(overviewData);
       setStockQuote(quoteData["Global Quote"]);
+      setActiveSymbol(ticker);
     } catch (error) {
       console.error("Failed to fetch stock data:", error);
     }
@@ -346,22 +395,24 @@ const InfoAboutStockComponent = () => {
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <TextField
-            style={{ marginTop: "20px" }}
-            fullWidth
-            label="Enter the company ticker"
-            variant="outlined"
-            value={ticker}
-            onChange={handleInputChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Button onClick={fetchStockData}>Search</Button>
+          <form onSubmit={handleFormSubmit}>
+            <TextField
+              style={{ marginTop: "20px" }}
+              fullWidth
+              label="Enter the company ticker"
+              variant="outlined"
+              value={ticker}
+              onChange={handleInputChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Button type="submit">Search</Button>
+          </form>
         </Grid>
         {stockData && (
           <>
@@ -369,16 +420,16 @@ const InfoAboutStockComponent = () => {
               <StockHeader data={stockData} quote={stockQuote} />
             </Grid>
             <Grid item xs={12}>
-              <StockChart />
+              <StockChart symbol={activeSymbol} />
             </Grid>
-            <Grid item xs={12}>
-              <StockDetails data={stockData} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <RecentNews />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <RecentFilings />
+
+            <Grid container item xs={12} spacing={2}>
+              <Grid item xs={12} md={6}>
+                <StockDetails data={stockData} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <RecentNews symbol={activeSymbol} />
+              </Grid>
             </Grid>
           </>
         )}

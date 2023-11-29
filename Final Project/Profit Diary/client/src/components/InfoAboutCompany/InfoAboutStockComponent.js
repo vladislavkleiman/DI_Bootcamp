@@ -320,8 +320,7 @@ const RecentNews = ({ symbol }) => {
     const year = timeString.substring(0, 4);
     const month = timeString.substring(4, 6);
     const day = timeString.substring(6, 8);
-    const time = timeString.substring(9, 15);
-    return `${year}-${month}-${day} ${time}`;
+    return `${year}-${month}-${day}`;
   };
 
   return (

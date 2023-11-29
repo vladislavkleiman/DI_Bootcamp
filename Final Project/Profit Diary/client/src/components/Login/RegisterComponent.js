@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Container, Typography } from "@mui/material";
 
-const LoginComponent = () => {
+const RegisterComponent = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -16,11 +16,11 @@ const LoginComponent = () => {
     }
   };
 
-  const handleLogin = async (event) => {
+  const handleRegister = async (event) => {
     event.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:5000/profitdiary/auth/login",
+        "http://localhost:5000/profitdiary/auth/register",
         {
           method: "POST",
           headers: {
@@ -37,24 +37,23 @@ const LoginComponent = () => {
       const data = await response.json();
       console.log(data);
 
-      if (data.userId) {
-        localStorage.setItem("userId", data.userId);
-        navigate("/home");
+      if (data.id) {
+        navigate("/login");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during registration:", error);
     }
   };
 
-  const handleRegisterClick = () => {
-    navigate("/register");
-  };
-
   return (
-    <Container maxWidth="xs" className="mainLogin">
-      <form className="formLogin" name="formLogin" onSubmit={handleLogin}>
+    <Container maxWidth="xs" className="mainRegister">
+      <form
+        className="formRegister"
+        name="formRegister"
+        onSubmit={handleRegister}
+      >
         <Typography variant="h5" align="center">
-          Login
+          Register
         </Typography>
         <TextField
           fullWidth
@@ -82,17 +81,6 @@ const LoginComponent = () => {
           sx={{ mt: 2 }}
           style={{ backgroundColor: "black", color: "white" }}
         >
-          Login
-        </Button>
-        <Button
-          variant="outlined"
-          color="primary"
-          fullWidth
-          size="large"
-          sx={{ mt: 1 }}
-          onClick={handleRegisterClick}
-          style={{ backgroundColor: "black", color: "white" }}
-        >
           Register
         </Button>
       </form>
@@ -100,4 +88,4 @@ const LoginComponent = () => {
   );
 };
 
-export default LoginComponent;
+export default RegisterComponent;
